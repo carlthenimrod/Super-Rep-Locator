@@ -1,72 +1,178 @@
 <?php
-	class rep extends CI_Model{
 
-		function save(){
+class rep extends CI_Model{
 
-			$post = $this->input->post(NULL, TRUE);
+    function __construct(){
+    	
+        parent::__construct();
 
+		$this->load->model('country');
+		$this->load->model('location');
+    }
+
+	function save(){
+
+		$post = $this->input->post(NULL, TRUE);
+
+		//if no country id, save new country, retrieve id
+		if( !$post['country_id'] ){
+
+			//prepare data
 			$data = array(
 
-				'name' => $post['name'],
-				'address' => $post['address'],
-				'city' => $post['city'],
-				'state' => $post['state'],
-				'zip' => $post['zip'],
-				'company' => $post['company'],
-				'phone' => $post['phone'],
-				'fax' => $post['fax'],
-				'email' => $post['email'],
-				'web' => $post['web'],
-				'lat' => $post['lat'],
-				'lng' => $post['lng']
+				'short_name' => $post['country_short_name'],
+				'long_name'  => $post['country_long_name'],
+				'lat'        => $post['country_lat'],
+				'lng'        => $post['country_lng'],
 			);
 
-			$this->db->insert('reps', $data);
+			//save
+			$country_id = $this->country->save($data);
+		}
+		else{
 
-			$post['id'] = $this->db->insert_id();
-
-			return $post;
+			$country_id = $post['country_id'];
 		}
 
-		function update($id){
+		//if no location id, save new location, retrieve id
+		if( !$post['location_id'] ){
 
-			$post = $this->input->post(NULL, TRUE);
-
+			//prepare data
 			$data = array(
 
-				'name' => $post['name'],
-				'address' => $post['address'],
-				'city' => $post['city'],
-				'state' => $post['state'],
-				'zip' => $post['zip'],
-				'company' => $post['company'],
-				'phone' => $post['phone'],
-				'fax' => $post['fax'],
-				'email' => $post['email'],
-				'web' => $post['web'],
-				'lat' => $post['lat'],
-				'lng' => $post['lng']
+				'country_id' => $country_id,
+				'short_name' => $post['location_short_name'],
+				'long_name'  => $post['location_long_name'],
+				'lat'        => $post['location_lat'],
+				'lng'        => $post['location_lng'],
 			);
 
-			$this->db->where('id', $id);
-			$this->db->update('reps', $data);
+			//save
+			$location_id = $this->location->save($data);
+		}
+		else{
 
-			return $post;
+			$location_id = $post['location_id'];
 		}
 
-		function delete($id){
+		$data = array(
 
-			$this->db->where('id', $id);
-			$this->db->delete('reps');
-		}
+			'location_id' => $location_id,
+			'name'        => $post['name'],
+			'address'     => $post['address'],
+			'city'        => $post['city'],
+			'state'       => $post['state'],
+			'zip'         => $post['zip'],
+			'company'     => $post['company'],
+			'phone'       => $post['phone'],
+			'fax'         => $post['fax'],
+			'email'       => $post['email'],
+			'web'         => $post['web'],
+			'lat'         => $post['lat'],
+			'lng'         => $post['lng']
+		);
 
-		function all(){
+		$this->db->insert('rep', $data);
 
-			$query = $this->db->get('reps');
+		$post['id'] = $this->db->insert_id();
 
-			$result = $query->result();
+		return $post;
+	}
 
-			return $result;
+	function update($id){
+
+		$post = $this->input->post(NULL, TRUE);
+
+		$data = array(
+
+			'name'    => $post['name'],
+			'address' => $post['address'],
+			'city'    => $post['city'],
+			'state'   => $post['state'],
+			'zip'     => $post['zip'],
+			'company' => $post['company'],
+			'phone'   => $post['phone'],
+			'fax'     => $post['fax'],
+			'email'   => $post['email'],
+			'web'     => $post['web'],
+			'lat'     => $post['lat'],
+			'lng'     => $post['lng']
+		);
+
+		$this->db->where('id', $id);
+		$this->db->update('rep', $data);
+
+		return $post;
+	}
+
+	function delete($id){
+
+		//get location id
+		$location_id = $this->get_location_id($id);
+
+		//delete rep
+		$this->db->where('id', $id);
+		$this->db->delete('rep');
+
+		//count remaining reps
+		$reps_count = $this->reps_remaining($location_id);
+
+		//if no more reps
+		if($reps_count == 0){
+
+			//get country id
+			$country_id = $this->location->get_country_id($location_id);
+
+			//delete location
+			$this->location->delete($location_id);
+
+			//count remaining locations
+			$locations_count = $this->location->locations_remaining($country_id);
+
+			//if no more locations
+			if($locations_count == 0){
+
+				//delete country
+				$this->country->delete($country_id);
+			}
 		}
 	}
-?>
+
+	function all(){
+
+		$query = $this->db->get('rep');
+
+		$result = $query->result();
+
+		return $result;
+	}
+
+	function get_location_id($id){
+
+		$this->db->select('location_id');
+		$this->db->from('rep');
+		$this->db->where('id', $id);
+
+		$query = $this->db->get();
+
+		if( $query->num_rows() > 0 ){
+
+			return $query->row()->location_id;
+		}
+		else{
+
+			return false;
+		}
+	}
+
+	function reps_remaining($id){
+
+		$this->db->select('id');
+		$this->db->from('rep');
+		$this->db->where('location_id', $id);
+
+		$query = $this->db->get();
+
+		return $query->num_rows();
+	}
+}

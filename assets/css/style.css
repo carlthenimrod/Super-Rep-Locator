@@ -8,35 +8,18 @@ body{
 	background-color: #EEE;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 16px;
-	margin: 0;
+	margin: 0 auto;
 	padding: 0;
+	width: 960px;
 }
 img{
 	border: none;
 }
 
 /*** Container ***/
-.sr-border{
-	background-color: #000;
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
-	margin: 100px auto;
-	padding: 3px;
-	width: 960px;
-}
 .sr-ctn{
-	background: #7d7e7d; /* Old browsers */
-	background: -moz-linear-gradient(top,  #7d7e7d 0%, #383838 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#383838)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #7d7e7d 0%,#383838 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #7d7e7d 0%,#383838 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #7d7e7d 0%,#383838 100%); /* IE10+ */
-	background: linear-gradient(to bottom,  #7d7e7d 0%,#383838 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#383838',GradientType=0 ); /* IE6-9 */
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	-webkit-box-shadow:  5px 5px 50px 5px rgba(0, 0, 0, 0.3);
-	box-shadow:  5px 5px 50px 5px rgba(0, 0, 0, 0.3);
+	background-color: #fafafa;
+	margin: 80px 0 0 0;
 }
 .sr-body{
 	padding: 20px;
@@ -44,9 +27,7 @@ img{
 
 /*** Map ***/
 .sr-map{
-	border: 1px solid #000;
-	-webkit-box-shadow:  0px 0px 5px 2px rgba(0, 0, 0, 0.3);
-	box-shadow:  0px 0px 5px 2px rgba(0, 0, 0, 0.3);
+	border: 1px solid #ccc;
 	position: relative;
 }
 #sr-map{
@@ -56,9 +37,8 @@ img{
 
 /*** Geolocator ***/
 .sr-geo{
-	background-color: rgba(0, 0, 0, .2);
-	border-bottom: 1px solid #000;
-	color: #FFF;
+	border-bottom: 5px solid #eee;
+	color: #000;
 	font-size: 14px;
 	overflow: hidden;
 	padding: 10px 0;
@@ -74,15 +54,13 @@ img{
 	line-height: 20px;
 	padding: 0 8px 0 0;
 	text-align: right;
-	text-shadow: 1px 1px 0px #000000;
-    filter: dropshadow(color=#000000, offx=1, offy=1);
 	white-space: nowrap;
 	width: 6%;
 }
 .sr-geo input[type="textfield"]{
-	border: 1px solid #000;
-	background-color: #333;
-	color: #999;
+	border: 1px solid #ccc;
+	background-color: #ddd;
+	color: #000;
 	height: 20px;
 	padding: 0 5px;
 }
@@ -95,9 +73,7 @@ img{
 	background: -ms-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
-	border: 1px solid #000;
-	-webkit-box-shadow:  0px 0px 5px 2px rgba(0, 0, 0, 0.2);
-	box-shadow:  0px 0px 5px 2px rgba(0, 0, 0, 0.2);
+	border: 1px solid #ccc;
 	color: #000;
 	cursor: pointer;
 	font-family: Verdana, Arial;
@@ -130,8 +106,8 @@ img{
 
 /*** Edit Box ***/
 .sr-edit-info{
-	background: rgba(70, 70, 70, 0.95);
-	border-bottom: 2px solid #000;
+	background: rgba(245, 245, 245, 0.95);
+	border-bottom: 1px solid #ccc;
 	display: none;
 	height: 200px;
 	padding: 10px 20px;
@@ -145,22 +121,19 @@ img{
 	margin: 4px 0;
 }
 .sr-edit-info label{
-	color: #FFF;
+	color: #000;
 	font-size: 13px;
-	font-weight: bold;
 	float: left;
 	line-height: 20px;
 	padding: 0 15px 0 0;
 	text-align: right;
-	text-shadow: 1px 1px 0px #000000;
-    filter: dropshadow(color=#000000, offx=1, offy=1);
 	white-space: nowrap;
 	width: 10%;
 }
 .sr-edit-info input[type="textfield"]{
-	border: 1px solid #000;
-	background-color: #333;
-	color: #999;
+	border: 1px solid #ccc;
+	background-color: #ddd;
+	color: #000;
 	float: left;
 	height: 20px;
 	margin: 4px 3% 4px 0;
@@ -181,9 +154,7 @@ img{
 	background: -ms-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* IE10+ */
 	background: linear-gradient(to bottom,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
-	border: 1px solid #000;
-	-webkit-box-shadow:  0px 0px 5px 2px rgba(0, 0, 0, 0.2);
-	box-shadow:  0px 0px 5px 2px rgba(0, 0, 0, 0.2);
+	border: 1px solid #ccc;
 	cursor: pointer;
 	font-family: Verdana;
 	font-size: 11px;
@@ -201,8 +172,8 @@ img{
 
 /*** Message Window ***/
 .sr-msg{
-	background: rgba(20, 20, 20, .95);
-	border-top: 1px solid #000;
+	background: rgba(245, 245, 245, 0.95);
+	border-top: 1px solid #ccc;
 	color: #D00;
 	display: none;
 	font-family: Verdana;

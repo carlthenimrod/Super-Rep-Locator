@@ -1,4 +1,6 @@
-<?php class Reps extends CI_Controller{
+<?php 
+
+class Reps extends CI_Controller{
 
 	function index(){
 

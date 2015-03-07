@@ -8,6 +8,8 @@ $(function(){
 		loading = false,
 		markers = [],
 		timeout = false,
+		country = false,
+		location = false,
 		pinImage;
 
 	//create active pin image
@@ -74,8 +76,9 @@ $(function(){
 		}
 	});
 
-	//FUNCTIONS
-	markerClick = function(){
+	// Functions
+	/////////////////////////////
+	var markerClick = function(){
 
 		//show info box, pass attributes
 		showInfoBox(this.attr);
@@ -93,7 +96,7 @@ $(function(){
 		activeMarker.setIcon(pinImage);
 	};
 
-	showInfoBox = function(obj){
+	var showInfoBox = function(obj){
 
 		var editBox = $('.sr-edit-info'),
 			children = editBox.children();
@@ -144,7 +147,7 @@ $(function(){
 		});
 	};
 
-	hideInfoBox = function(){
+	var hideInfoBox = function(){
 
 		var editBox = $('.sr-edit-info'),
 			children = editBox.children();
@@ -159,13 +162,13 @@ $(function(){
 		});
 	};
 
-	showErrorMessage = function(msg){
+	var showErrorMessage = function(msg){
 
 		var ctn = $('.sr-msg');
 
 		ctn.css('display', 'block');
 
-		ctn.html('Error: ' + msg);
+		ctn.html(msg);
 
 		if(timeout) window.clearTimeout(timeout);
 
@@ -176,7 +179,188 @@ $(function(){
 		}, 2000);
 	};
 
-	//EVENTS
+	var findCountry = function(components){
+
+		var country = {},
+			component,
+			i, l, x, y;
+
+		//for each address component
+		for(i = 0, l = components.length; i < l; ++i){
+
+			//store component
+			component = components[i];
+
+			//check each type
+			for(x = 0, y = component.types.length; x < y; ++ x){
+
+				//if type is country
+				if(component.types[x] === 'country'){
+
+					//success - store values
+					country.short_name = component['short_name'];
+					country.long_name  = component['long_name'];
+
+					return country;
+				}
+			}
+		}
+
+		return false;
+	};
+
+	var findLocation = function(components){
+
+		var location = {},
+			area1 = false,
+			area2 = false,
+			area3 = false,
+			area4 = false,
+			area5 = false,
+			component,
+			i, l, x, y;
+
+		for(i = 0, l = components.length; i < l; ++i){
+
+			//store component
+			component = components[i];
+
+			//check each type
+			for(x = 0, y = component.types.length; x < y; ++ x){
+
+				//depending on type, assign to var
+				switch(component.types[x]){
+
+					case 'administrative_area_level_1':
+					area1 = component;
+					break;
+
+					case 'administrative_area_level_2':
+					area2 = component;
+					break;
+
+					case 'administrative_area_level_3':
+					area3 = component;
+					break;
+
+					case 'administrative_area_level_4':
+					area4 = component;
+					break;
+
+					case 'administrative_area_level_5':
+					area5 = component;
+					break;
+				}
+			}
+		}
+
+		//return the highest level
+		if(area1){
+
+			location.short_name = area1['short_name'];
+			location.long_name = area1['long_name'];
+
+			return location;
+		}
+
+		if(area2){
+
+			location.short_name = area2['short_name'];
+			location.long_name = area2['long_name'];
+
+			return location;
+		}
+
+		if(area3){
+
+			location.short_name = area3['short_name'];
+			location.long_name = area3['long_name'];
+
+			return location;
+		}
+
+		if(area4){
+
+			location.short_name = area4['short_name'];
+			location.long_name = area4['long_name'];
+
+			return location;
+		}
+
+		if(area5){
+
+			location.short_name = area5['short_name'];
+			location.long_name = area5['long_name'];
+
+			return location;
+		}
+
+		return false;
+	};
+
+	var getCoords = function(obj, address){
+
+		var lat, lng;
+
+		//get lat/lng - country
+		geocoder.geocode({'address' : address}, function(results, status){
+
+			if(status == google.maps.GeocoderStatus.OK){
+
+				lat = results[0].geometry.location.lat();
+				lng = results[0].geometry.location.lng();
+
+				obj.coords = [lat, lng];
+
+				return obj;
+			}
+			else if(status == google.maps.GeocoderStatus.ZERO_RESULTS){
+
+				$('.sr-edit-info').hide();
+
+				showErrorMessage('No Results Found.');
+
+				return false;
+			}
+			else if(status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT){
+
+				$('.sr-edit-info').hide();
+				
+				showErrorMessage('Over Query Limit, Try Again Later.');
+
+				return false;
+			}
+			else if(status == google.maps.GeocoderStatus.REQUEST_DENIED){
+
+				$('.sr-edit-info').hide();
+				
+				showErrorMessage('Request Denied.');
+
+				return false;
+			}
+			else if(status == google.maps.GeocoderStatus.INVALID_REQUEST){
+
+				$('.sr-edit-info').hide();
+				
+				showErrorMessage('Invalid Request');
+
+				return false;
+			}
+			else{
+
+				$('.sr-edit-info').hide();
+
+				showErrorMessage('Unknown Error, Contact Administrator');
+
+				return false;
+			}
+		});
+
+		return obj;
+	};
+
+	// Events
+	/////////////////////////////
 	$('form.sr-search').on('submit', function(e){
 
 		e.preventDefault();
@@ -203,32 +387,80 @@ $(function(){
 
 		//get lat/lng of full_address
 		geocoder.geocode({'address' : full_address}, function(results, status){
-			console.log(results);
+
 			if(status == google.maps.GeocoderStatus.OK){
 
-				//set map and zoom to marker location
-				map.setCenter(results[0].geometry.location);
-				map.setZoom(4);
-				
-				//create marker
-				activeMarker = new google.maps.Marker({
-					draggable: true,
-					map: map,
-					position: results[0].geometry.location,
-					icon: pinImage
+				//find country
+				country = findCountry( results[0].address_components );
+
+				//find location
+				location = findLocation( results[0].address_components );
+
+				//check if already present
+				$.when( 
+					$.ajax( 'countries/check', { data: country, type: 'POST' } ), 
+					$.ajax( 'locations/check', { data: location, type: 'POST' } ) 
+				).then(function(c, l){
+
+					//store ids
+					country.id  = c[0];
+					location.id = l[0];
+
+					//get coords
+					country  = getCoords(country, country.long_name);
+					location = getCoords(location, location.long_name + ', ' + country.long_name);
+
+					//if results missing
+					if( !country || !location ){
+
+						//show error
+						showErrorMessage('Please be more specific with location.');
+
+						$('.sr-edit-info').hide();
+
+						//set back to false
+						country = false;
+						location = false;
+
+						return;
+					}
+
+					//set map and zoom to marker location
+					map.setCenter(results[0].geometry.location);
+					map.setZoom(4);
+					
+					//create marker
+					activeMarker = new google.maps.Marker({
+						draggable: true,
+						map: map,
+						position: results[0].geometry.location,
+						icon: pinImage
+					});
+
+					//create obj with form values
+					obj = {
+
+						'address' : address,
+						'state' : state,
+						'city' : city,
+						'zip' : zip
+					};
+
+					//show info box, send form values
+					showInfoBox(obj);
+
+				}, function(){
+
+					//set back to false
+					country = false;
+					location = false;
+
+					$('.sr-edit-info').hide();
+
+					showErrorMessage('Unknown Error, Contact Administrator.');
+
+					return;
 				});
-
-				//create obj with form values
-				obj = {
-
-					'address' : address,
-					'state' : state,
-					'city' : city,
-					'zip' : zip
-				};
-
-				//show info box, send form values
-				showInfoBox(obj);
 			}
 			else if(status == google.maps.GeocoderStatus.ZERO_RESULTS){
 
@@ -307,10 +539,39 @@ $(function(){
 		//set id if present
 		if(id) data.id = id;
 
+		//set country data
+		if( parseInt(country.id) ){
+
+			data.country_id = country.id;
+		}
+		else{ //set extra info
+
+			data.country_id         = country.id;
+			data.country_short_name = country.short_name;
+			data.country_long_name  = country.long_name;
+			data.country_lat        = country.coords[0];
+			data.country_lng        = country.coords[1];
+		}
+
+		//set location data
+		if( parseInt(location.id) ){
+
+			data.location_id         = location.id;
+		}
+		else{ //set extra info
+
+			data.location_id         = location.id;
+			data.location_short_name = location.short_name;
+			data.location_long_name  = location.long_name;
+			data.location_lat        = location.coords[0];
+			data.location_lng        = location.coords[1];
+		}
+
 		if(loading) return;
 
 		//now loading
 		loading = true;
+		
 		$('.sr-loading').css('display', 'block');
 
 		//do ajax
@@ -319,9 +580,10 @@ $(function(){
 			'data' : data,
 			'dataType' : 'json',
 			'type' : 'POST',
-			'url' : '/gmap/reps/save/'
+			'url' : 'reps/save/'
 
-		}).then(function(data){
+		})
+		.then(function(data){
 
 			//hide edit window
 			$('.sr-edit-info').css('display', 'none');
@@ -401,6 +663,7 @@ $(function(){
 
 			//not loading
 			loading = false;
+
 			$('.sr-loading').css('display', 'none');
 
 			showErrorMessage('Unable to Save, Try Again and Contact Administrator if Problem Persists.');
@@ -438,7 +701,7 @@ $(function(){
 					'data' : data,
 					'dataType' : 'json',
 					'type' : 'POST',
-					'url' : '/gmap/reps/delete/'
+					'url' : 'reps/delete/'
 
 				}).then(function(data){
 
