@@ -8,6 +8,6 @@
 
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBFdwyvIEanwp0vRf8Ab8qEG96BcQZThuM"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="<?= base_url('assets/js/map.js'); ?>"></script>
+	<script src="<?= base_url('assets/js/admin.js'); ?>"></script>
 </head>
 <body>

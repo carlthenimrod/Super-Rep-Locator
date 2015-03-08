@@ -22,7 +22,7 @@ $(function(){
 	//ajax on load, retrieve all db records
 	$.ajax({
 
-		'url' : 'reps/all'
+		'url' : 'admin/all'
 	})
 	.done(function(data){
 
@@ -580,7 +580,7 @@ $(function(){
 			'data' : data,
 			'dataType' : 'json',
 			'type' : 'POST',
-			'url' : 'reps/save/'
+			'url' : 'admin/save/'
 
 		})
 		.then(function(data){
@@ -701,7 +701,7 @@ $(function(){
 					'data' : data,
 					'dataType' : 'json',
 					'type' : 'POST',
-					'url' : 'reps/delete/'
+					'url' : 'admin/delete/'
 
 				}).then(function(data){
 

@@ -188,3 +188,69 @@ img{
 	width: 100%;
 	z-index: 9999;
 }
+
+/*** Login Form ***/
+article#sr-login{
+	background-color: #fafafa;
+	border-radius: 10px;
+	margin: 200px auto 0 auto;
+	padding: 50px 10px 30px 10px;
+	width: 400px;
+}
+article#sr-login section#sr-form .sr-error p{
+	color: #c00;
+	font-size: 12px;
+	font-weight: bold;
+	margin: 0 0 5px 0;
+	text-align: center;
+}
+article#sr-login section#sr-form p{
+	font-weight: bold;
+	margin: 0 0 10px 0;
+	text-align: center;
+}
+article#sr-login section#sr-form form{
+	margin: 20px 0 0 0;
+	overflow: hidden;
+}
+article#sr-login section#sr-form div{
+	margin: 10px 0;
+	padding: 0 50px;
+	width: 100%;
+}
+article#sr-login section#sr-form div label{
+	display: inline-block;
+	font-size: 12px;
+	text-align: right;
+	width: 30%;
+}
+article#sr-login section#sr-form div input{
+	border: 1px solid #ccc;
+	background-color: #ddd;
+	color: #000;
+	display: inline-block;
+	height: 20px;
+	padding: 0 5px;
+	width: 65%;
+}
+article#sr-login section#sr-form button{
+	background: #ffffff; /* Old browsers */
+	background: -moz-linear-gradient(top,  #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f1f1f1), color-stop(51%,#e1e1e1), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
+	border: 1px solid #ccc;
+	cursor: pointer;
+	display: block;
+	float: right;
+	font-family: Verdana;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 10px 60px 0 0;
+	padding: 8px 15px;
+	text-shadow: 1px 1px 0px #FFFFFF;
+    filter: dropshadow(color=#FFFFFF, offx=1, offy=1);
+}
