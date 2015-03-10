@@ -34,30 +34,39 @@ class rep extends CI_Model{
 			$country_id = $post['country_id'];
 		}
 
-		//if no location id, save new location, retrieve id
-		if( !$post['location_id'] ){
+		//check if we have location
+		if( $post['location'] == 'true' ){
 
-			//prepare data
-			$data = array(
+			//if no location id, save new location, retrieve id
+			if( !$post['location_id'] ){
 
-				'country_id' => $country_id,
-				'short_name' => $post['location_short_name'],
-				'long_name'  => $post['location_long_name'],
-				'lat'        => $post['location_lat'],
-				'lng'        => $post['location_lng'],
-			);
+				//prepare data
+				$data = array(
 
-			//save
-			$location_id = $this->location->save($data);
+					'country_id' => $country_id,
+					'short_name' => $post['location_short_name'],
+					'long_name'  => $post['location_long_name'],
+					'lat'        => $post['location_lat'],
+					'lng'        => $post['location_lng'],
+				);
+
+				//save
+				$location_id = $this->location->save($data);
+			}
+			else{
+
+				$location_id = $post['location_id'];
+			}
 		}
-		else{
+		else{ //no location
 
-			$location_id = $post['location_id'];
+			$location_id = NULL;
 		}
 
 		$data = array(
 
 			'location_id' => $location_id,
+			'country_id'  => $country_id,
 			'name'        => $post['name'],
 			'address'     => $post['address'],
 			'city'        => $post['city'],
@@ -109,6 +118,7 @@ class rep extends CI_Model{
 
 		//get location id
 		$location_id = $this->get_location_id($id);
+		$country_id  = $this->get_country_id($id);
 
 		//delete rep
 		$this->db->where('id', $id);
@@ -119,9 +129,6 @@ class rep extends CI_Model{
 
 		//if no more reps
 		if($reps_count == 0){
-
-			//get country id
-			$country_id = $this->location->get_country_id($location_id);
 
 			//delete location
 			$this->location->delete($location_id);
@@ -158,6 +165,24 @@ class rep extends CI_Model{
 		if( $query->num_rows() > 0 ){
 
 			return $query->row()->location_id;
+		}
+		else{
+
+			return false;
+		}
+	}
+
+	function get_country_id($id){
+
+		$this->db->select('country_id');
+		$this->db->from('rep');
+		$this->db->where('id', $id);
+
+		$query = $this->db->get();
+
+		if( $query->num_rows() > 0 ){
+
+			return $query->row()->country_id;
 		}
 		else{
 

@@ -316,41 +316,21 @@ $(function(){
 			}
 			else if(status == google.maps.GeocoderStatus.ZERO_RESULTS){
 
-				$('.sr-edit-info').hide();
-
-				showErrorMessage('No Results Found.');
-
 				return false;
 			}
 			else if(status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT){
-
-				$('.sr-edit-info').hide();
-				
-				showErrorMessage('Over Query Limit, Try Again Later.');
 
 				return false;
 			}
 			else if(status == google.maps.GeocoderStatus.REQUEST_DENIED){
 
-				$('.sr-edit-info').hide();
-				
-				showErrorMessage('Request Denied.');
-
 				return false;
 			}
 			else if(status == google.maps.GeocoderStatus.INVALID_REQUEST){
 
-				$('.sr-edit-info').hide();
-				
-				showErrorMessage('Invalid Request');
-
 				return false;
 			}
 			else{
-
-				$('.sr-edit-info').hide();
-
-				showErrorMessage('Unknown Error, Contact Administrator');
 
 				return false;
 			}
@@ -411,7 +391,7 @@ $(function(){
 					location = getCoords(location, location.long_name + ', ' + country.long_name);
 
 					//if results missing
-					if( !country || !location ){
+					if( !country ){
 
 						//show error
 						showErrorMessage('Please be more specific with location.');
@@ -521,16 +501,16 @@ $(function(){
 		lng = activeMarker.position.lng();
 
 		data = {
-			'name' : name,
-			'address' : address,
-			'state' : state,
-			'city' : city,
-			'zip' : zip,
-			'company' : company,
-			'phone' : phone,
-			'fax' : fax,
-			'email' : email,
-			'web' : web,
+			'name' : name.trim(),
+			'address' : address.trim(),
+			'state' : state.trim(),
+			'city' : city.trim(),
+			'zip' : zip.trim(),
+			'company' : company.trim(),
+			'phone' : phone.trim(),
+			'fax' : fax.trim(),
+			'email' : email.trim(),
+			'web' : web.trim(),
 			'lat' : lat,
 			'lng' : lng,
 			'save' : save
@@ -539,32 +519,49 @@ $(function(){
 		//set id if present
 		if(id) data.id = id;
 
-		//set country data
-		if( parseInt(country.id) ){
 
-			data.country_id = country.id;
+		//if country
+		if( country ){
+
+			//set country data
+			if( parseInt(country.id) ){
+
+				data.country_id = country.id;
+			}
+			else{ //set extra info
+
+				data.country_id         = country.id;
+				data.country_short_name = country.short_name;
+				data.country_long_name  = country.long_name;
+				data.country_lat        = country.coords[0];
+				data.country_lng        = country.coords[1];
+			}
 		}
-		else{ //set extra info
 
-			data.country_id         = country.id;
-			data.country_short_name = country.short_name;
-			data.country_long_name  = country.long_name;
-			data.country_lat        = country.coords[0];
-			data.country_lng        = country.coords[1];
+		//if location
+		if( location ){
+
+			//location present
+			data.location = true;
+
+			//set location data
+			if( parseInt(location.id) ){
+
+				data.location_id         = location.id;
+			}
+			else{ //set extra info
+
+				data.location_id         = location.id;
+				data.location_short_name = location.short_name;
+				data.location_long_name  = location.long_name;
+				data.location_lat        = location.coords[0];
+				data.location_lng        = location.coords[1];
+			}
 		}
+		else{
 
-		//set location data
-		if( parseInt(location.id) ){
-
-			data.location_id         = location.id;
-		}
-		else{ //set extra info
-
-			data.location_id         = location.id;
-			data.location_short_name = location.short_name;
-			data.location_long_name  = location.long_name;
-			data.location_lat        = location.coords[0];
-			data.location_lng        = location.coords[1];
+			//no location
+			data.location = false;
 		}
 
 		if(loading) return;
@@ -587,6 +584,9 @@ $(function(){
 
 			//hide edit window
 			$('.sr-edit-info').css('display', 'none');
+
+			//reset search form
+			$('.sr-search')[0].reset();
 
 			//if no attribute are set, add to marker array
 			if(!activeMarker.attr){
