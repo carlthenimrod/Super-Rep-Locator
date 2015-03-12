@@ -7,6 +7,25 @@ class location extends CI_Model{
         parent::__construct();
     }
 
+    function all(){
+
+		$this->db->select('*');
+		$this->db->from('location');
+		$this->db->order_by('long_name');
+
+		$query = $this->db->get();
+
+		if( $query->num_rows() > 0 ){
+
+			return $query->result();
+		}
+		else{
+
+			return false;
+		}
+
+    }
+
 	function check_if_exists($data){
 
 		$this->db->select('id');

@@ -1,4 +1,3 @@
-//on ready
 $(function(){
 
 	var map,
@@ -47,6 +46,7 @@ $(function(){
 			//create marker
 			marker = new google.maps.Marker({
 				map: map,
+    			draggable: true,
 				position: location
 			});
 
@@ -518,7 +518,6 @@ $(function(){
 
 		//set id if present
 		if(id) data.id = id;
-
 
 		//if country
 		if( country ){

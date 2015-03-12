@@ -5,7 +5,7 @@ class Reps extends CI_Controller{
 	function index(){
 
 		$this->load->view('header');
-		$this->load->view('reps/index');
+		$this->load->view('index');
 		$this->load->view('footer');
 	}
 

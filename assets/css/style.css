@@ -18,10 +18,10 @@ img{
 
 /*** Container ***/
 .sr-ctn{
-	background-color: #fafafa;
 	margin: 80px 0 0 0;
 }
 .sr-body{
+	background-color: #fafafa;
 	padding: 20px;
 }
 
@@ -35,8 +35,36 @@ img{
 	width: 100%;
 }
 
+/*** Locator ***/
+#sr-locator{
+	border-bottom: 1px #ccc solid;
+	margin: 0 0 10px 0;
+	padding: 0 0 5px 0;
+}
+#sr-locator h1{
+	border-bottom: 1px #ccc solid;
+	font-size: 18px;
+	margin: 0 0 5px 0;
+	padding: 0 0 5px 0;
+}
+#sr-locator .sr-select-menu .sr-select-label{
+	display: inline-block;
+	font-size: 14px;
+	font-style: italic;
+	padding: 0 0 0 10px;
+}
+#sr-locator .sr-select-menu .sr-select-country{
+	display: inline-block;
+	margin: 0 0 0 10px;
+}
+#sr-locator .sr-select-menu .sr-select-location{
+	display: inline-block;
+	margin: 0 0 0 10px;
+}
+
 /*** Geolocator ***/
 .sr-geo{
+	background-color: #fafafa;
 	border-bottom: 5px solid #eee;
 	color: #000;
 	font-size: 14px;

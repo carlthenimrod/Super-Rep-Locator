@@ -10,6 +10,30 @@ class rep extends CI_Model{
 		$this->load->model('location');
     }
 
+	function all(){
+
+		$json = new stdClass();
+
+		//get countries and locations
+		$countries = $this->country->all();
+		$locations = $this->location->all();
+
+		//store on json object
+		if( $countries ) $json->countries = $countries;
+		if( $locations ) $json->locations = $locations;
+
+		//get reps
+		$query = $this->db->get('rep');
+
+		//if results
+		if( $query->num_rows() > 0 ){
+
+			$json->reps = $query->result();
+		}
+
+		return $json;
+	}
+
 	function save(){
 
 		$post = $this->input->post(NULL, TRUE);
@@ -143,15 +167,6 @@ class rep extends CI_Model{
 				$this->country->delete($country_id);
 			}
 		}
-	}
-
-	function all(){
-
-		$query = $this->db->get('rep');
-
-		$result = $query->result();
-
-		return $result;
 	}
 
 	function get_location_id($id){
