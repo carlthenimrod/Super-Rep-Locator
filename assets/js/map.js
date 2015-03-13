@@ -5,13 +5,14 @@ $(function(){
 		// Private Vars
 		//////////////////////
 		var map,
+			infoWindow,
 			$locator = $('#sr-locator'),
+			$info = $('#sr-reps-info'),
 			$selectMenu,
 			$countryMenu,
 			$locationMenu,
 			selectedCountry = false,
 			selectedLocation = false,
-			loading = false,
 			markers = [],
 			countries = false,
 			locations = false,
@@ -41,11 +42,18 @@ $(function(){
 					mapTypeId: google.maps.MapTypeId.ROADMAP
 				});
 
+				//create info window	
+				infoWindow = new google.maps.InfoWindow();
+
 				//create selectMenu
 				createSelectMenu();
 
-				//create Markers
-				createMarkers();
+				//create reps
+				createReps();
+
+				//create event for info box
+				$info.on('mouseenter', '.sr-rep', markerBounce);
+				$info.on('mouseleave', '.sr-rep', markerBounceStop);
 			});
 		};
 
@@ -99,7 +107,7 @@ $(function(){
 
 					option.attr('selected', 'selected');
 
-					selectedCountry = 1;
+					selectedCountry = countries[i];
 
 					//make top option
 					select.prepend(option);
@@ -140,7 +148,7 @@ $(function(){
 				if( countries[i].id === id ){
 
 					//change selected
-					selectedCountry = parseInt( countries[i].id, 10 );
+					selectedCountry = countries[i];
 
 					//update location menu
 					updateLocationMenu();
@@ -152,11 +160,14 @@ $(function(){
 					map.setCenter( coords );
 					map.setZoom( 4 );
 
-					//clear markers
-					clearMarkers();
+					//clear reps
+					clearReps();
 
-					//create markers
-					createMarkers();
+					//create reps
+					createReps();
+
+					//close info window
+					infoWindow.close();
 
 					break;
 				}
@@ -177,7 +188,7 @@ $(function(){
 			for(i = 0, l = locations.length; i < l; ++i){
 
 				//skip if not correct id
-				if( locations[i].country_id != selectedCountry ) continue;
+				if( locations[i].country_id != selectedCountry.id ) continue;
 
 				//add to selected array
 				selected.push( locations[i] );
@@ -243,7 +254,7 @@ $(function(){
 			for(i = 0, l = locations.length; i < l; ++i){
 
 				//skip if not correct id
-				if( locations[i].country_id != selectedCountry ) continue;
+				if( locations[i].country_id != selectedCountry.id ) continue;
 
 				//add to selected array
 				selected.push( locations[i] );
@@ -303,7 +314,7 @@ $(function(){
 				if( locations[i].id === id ){
 
 					//change selected
-					selectedLocation = parseInt( locations[i].id, 10 );
+					selectedLocation = locations[i];
 
 					//store coords
 					coords = new google.maps.LatLng(locations[i].lat, locations[i].lng);
@@ -312,21 +323,28 @@ $(function(){
 					map.setCenter( coords );
 					map.setZoom( 6 );
 
-					//clear markers
-					clearMarkers();
+					//clear reps
+					clearReps();
 
-					//create markers
-					createMarkers(true);
+					//create reps
+					createReps(true);
 
 					break;
 				}
 			}
+
+			//close info window
+			infoWindow.close();
 		};
 
-		var createMarkers = function(animate){
+		var createReps = function(animate){
 
-			var coords,
+			var $rep,
+				coords,
 				marker,
+				markerCount,
+				h2,
+				html = '',
 				i, l;
 
 			//find if we need to animate
@@ -337,13 +355,13 @@ $(function(){
 				if( selectedCountry ){ //if country is selected
 
 					//make sure country id matches
-					if( reps[i].country_id != selectedCountry ) continue;
+					if( reps[i].country_id != selectedCountry.id ) continue;
 				}
 
 				if( selectedLocation ){ //if location is selected
 
 					//make sure location id matches
-					if( reps[i].location_id != selectedLocation ) continue;
+					if( reps[i].location_id != selectedLocation.id ) continue;
 				}
 
 				//store location
@@ -354,6 +372,7 @@ $(function(){
 
 					//create marker
 					marker = new google.maps.Marker({
+
 	    				animation: google.maps.Animation.DROP,
 						map: map,
 						position: coords
@@ -363,27 +382,24 @@ $(function(){
 
 					//create marker
 					marker = new google.maps.Marker({
+
 						map: map,
 						position: coords
 					});
 				}
 
+				//parse rep
+				$rep = parseText( reps[i] );
+
+				$info.append( $rep.clone() );
+
 				//set attributes
 				marker.attr = {
 
-					'id' : reps[i].id,
-					'name' : reps[i].name.trim,
-					'address' : reps[i].address.trim,
-					'state' : reps[i].state.trim,
-					'city' : reps[i].city.trim,
-					'zip' : reps[i].zip.trim,
-					'company' : reps[i].company.trim,
-					'phone' : reps[i].phone.trim,
-					'fax' : reps[i].fax.trim,
-					'email' : reps[i].email.trim,
-					'web' : reps[i].web.trim,
-					'lat' : reps[i].lat,
-					'lng' : reps[i].lng
+					id : reps[i].id,
+					content : $rep,
+					lat : reps[i].lat,
+					lng : reps[i].lng
 				}
 
 				//add click event
@@ -392,9 +408,28 @@ $(function(){
 				//add to markers array
 				markers.push(marker);
 			}
+
+			//if there are reps
+			if( markers.length > 0 ){
+
+				//create h2
+				h2 = $('<h2 />');
+
+				//create inner html
+				if( selectedLocation ) html = selectedLocation.long_name + ', ';
+				if( selectedCountry ) html += selectedCountry.long_name + ' - ';
+
+				html += markers.length + ' Reps Located';
+
+				//store html
+				h2.html(html);
+
+				//prepend h2
+				$info.prepend(h2);
+			}
 		};
 
-		var clearMarkers = function(){
+		var clearReps = function(){
 
 			var i, l;
 
@@ -405,12 +440,207 @@ $(function(){
 				markers[i].setMap(null);
 			}
 
+			//empty info window
+			$info.empty();
+
 			//set markers as empty
-			markers = [];
+			markers.length = 0;
 		}
 
 		var markerClick = function(){
 
+			//stop any running animations
+			markerBounceStop();
+
+			//if any content
+			if( this.attr.content.html().trim() ){
+
+				//add content to info window
+				infoWindow.setContent( this.attr.content[0] );
+
+				//open info window
+				infoWindow.open(map, this);
+			}
+		};
+
+		var markerBounce = function(){
+
+			var id = $(this).attr('id'),
+				i, l;
+
+			for(i = 0, l = markers.length; i < l; ++i){
+
+				if(markers[i].attr.id === id){
+
+					markers[i].setAnimation( google.maps.Animation.BOUNCE );
+				}
+				else{
+
+					markers[i].setAnimation( null );
+				}
+			}
+		};
+
+		var markerBounceStop = function(){
+
+			var i, l;
+
+			for(i = 0, l = markers.length; i < l; ++i){
+
+				markers[i].setAnimation( null );
+			}
+		};
+
+		var parseText = function(rep){
+
+			var $content,
+				name,
+				company,
+				email,
+				address,
+				city,
+				state,
+				zip,
+				phone,
+				fax,
+				web;
+
+			//create div
+			$content = $('<div />', { 
+				class: 'sr-rep',
+				id: rep.id
+			});
+
+			//create shorthand names
+			name    = rep.name.trim();
+			company = rep.company.trim();
+			email   = rep.email.trim();
+			address = rep.address.trim();
+			city    = rep.city.trim();
+			state   = rep.state.trim();
+			zip     = rep.zip.trim();
+			phone   = rep.phone.trim();
+			fax     = rep.fax.trim();
+			web     = rep.web.trim();
+
+			//parse text
+			if( name ) 
+				$content.append( parseName( name ) );
+			if( company ) 
+				$content.append( parseCompany( company ) );
+			if( email ) 
+				$content.append( parseEmail( email ) );
+			if( address ) 
+				$content.append( parseAddress( address ) );
+			if( city || state || zip )
+				$content.append( parseAddress2( city, state, zip ) );
+			if( phone ) 
+				$content.append( parsePhone( phone ) );
+			if( fax ) 
+				$content.append( parseFax( fax ) );
+			if( web ) 
+				$content.append( parseWeb( web ) );
+
+			return $content;
+		};
+
+		var parseName = function(name){
+
+			return $('<div />').html(name);
+		};
+
+		var parseCompany = function(company){
+
+			return $('<div />').html(company);
+		};
+
+		var parseEmail = function(email){
+
+			var link;
+
+			link = $('<a />',{
+
+				href: 'mailto:' + email
+			});
+
+			return $('<div />').html('Email: ' + link);
+		};
+
+		var parseAddress = function(address){
+
+			return $('<div />').html(address);
+		};
+
+		var parseAddress2 = function(city, state, zip){
+
+			var text = '';
+
+			//text for various combinations of city, state, and/or zip
+			if(city && state){
+
+				text = city + ', ' + state;
+
+				if(zip){
+
+					text += ' ' + zip;
+				}
+			}
+			else if(city || state){
+
+				if(city && zip){ 
+
+					text = city + ', ' + zip;
+				}
+				else if(city && !zip){
+
+					text = city;
+				}
+				else if(state && zip){
+
+					text = state + ', ' + zip;
+				}
+				else{
+
+					text = state;
+				}
+			}
+			else{
+
+				text = zip;
+			}
+
+			return $('<div />').html(text);
+		};
+
+		var parsePhone = function(phone){
+
+			var link;
+
+			link = $('<a />',{
+
+				href: 'mailto:' + phone
+			})
+			.html(phone);
+
+			return $('<div />').append( 'Phone: ', link );
+		};
+
+		var parseFax = function(fax){
+
+			return $('<div />').html('Fax: ' + fax);
+		};
+
+		var parseWeb = function(web){
+
+			var link;
+
+			link = $('<a />',{
+
+				href: web
+			})
+			.html(web);
+
+			return $('<div />').append( link );
 		};
 
 		return{

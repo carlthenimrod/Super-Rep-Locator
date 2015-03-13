@@ -18,7 +18,7 @@ img{
 
 /*** Container ***/
 .sr-ctn{
-	margin: 80px 0 0 0;
+	margin: 20px 0 0 0;
 }
 .sr-body{
 	background-color: #fafafa;
@@ -34,32 +34,100 @@ img{
 	height: 600px;
 	width: 100%;
 }
+#sr-map .sr-rep a{
+	text-decoration: underline;
+}
+#sr-map .sr-rep a:hover{
+	text-decoration: none;
+}
 
 /*** Locator ***/
-#sr-locator{
+section#sr-locator{
 	border-bottom: 1px #ccc solid;
 	margin: 0 0 10px 0;
 	padding: 0 0 5px 0;
 }
-#sr-locator h1{
+section#sr-locator h1{
 	border-bottom: 1px #ccc solid;
 	font-size: 18px;
 	margin: 0 0 5px 0;
 	padding: 0 0 5px 0;
 }
-#sr-locator .sr-select-menu .sr-select-label{
+section#sr-locator .sr-select-menu .sr-select-label{
 	display: inline-block;
 	font-size: 14px;
 	font-style: italic;
 	padding: 0 0 0 10px;
 }
-#sr-locator .sr-select-menu .sr-select-country{
+section#sr-locator .sr-select-menu .sr-select-country{
 	display: inline-block;
 	margin: 0 0 0 10px;
 }
-#sr-locator .sr-select-menu .sr-select-location{
+section#sr-locator .sr-select-menu .sr-select-location{
 	display: inline-block;
 	margin: 0 0 0 10px;
+}
+
+/*** Rep Info ***/
+section#sr-reps-info{
+	border-top: 1px #ccc solid;
+	max-height: 300px;
+	overflow: scroll;
+	margin: 10px 0;
+	padding: 30px 0 0 0;
+	position: relative;
+	vertical-align: top;
+}
+section#sr-reps-info h2{
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 5px;
+	left: 15px;
+}
+section#sr-reps-info .sr-rep{
+	background: rgb(255,255,255); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(229,229,229,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(100%,rgba(229,229,229,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	cursor: pointer;
+	display: inline-block;
+	font-size: 12px;
+	line-height: 21px;
+	margin: 0 1% 10px 1%;
+	padding: 20px;
+	text-align: center;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    vertical-align: top;
+	width: 31.333%;
+}
+section#sr-reps-info .sr-rep:hover{
+	background: rgb(229,229,229); /* Old browsers */
+	background: -moz-linear-gradient(top,  rgba(229,229,229,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(229,229,229,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(229,229,229,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e5e5e5', endColorstr='#ffffff',GradientType=0 ); /* IE6-9 */
+}
+section#sr-reps-info .sr-rep a{
+	text-decoration: underline;
+}
+section#sr-reps-info .sr-rep a:hover{
+	text-decoration: none;
 }
 
 /*** Geolocator ***/

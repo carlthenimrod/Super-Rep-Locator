@@ -388,7 +388,7 @@ $(function(){
 
 					//get coords
 					country  = getCoords(country, country.long_name);
-					location = getCoords(location, location.long_name + ', ' + country.long_name);
+					location = getCoords(location, location.short_name + ', ' + country.long_name);
 
 					//if results missing
 					if( !country ){
