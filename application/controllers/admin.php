@@ -24,22 +24,7 @@ class Admin extends CI_Controller{
 
 			$record = $this->rep->save();
 
-			$data['json'] = '{
-
-				"id" : '. $record['id'] .',
-				"name" : "'. $record['name'] .'",
-				"address" : "'. $record['address'] .'",
-				"city" : "'. $record['city'] .'",
-				"state" : "'. $record['state'] .'",
-				"zip" : "'. $record['zip'] .'",
-				"company" : "'. $record['company'] .'",
-				"phone" : "'. $record['phone'] .'",
-				"fax" : "'. $record['fax'] .'",
-				"email" : "'. $record['email'] .'",
-				"web" : "'. $record['web'] .'",
-				"lat" : '. $record['lat'] .',
-				"lng" : '. $record['lng'] .'
-			}';
+			$data['json'] = json_encode($record);
 		}
 		else{
 
@@ -47,22 +32,7 @@ class Admin extends CI_Controller{
 
 			$record = $this->rep->update($id);
 
-			$data['json'] = '{
-
-				"id" : '. $record['id'] .',
-				"name" : "'. $record['name'] .'",
-				"address" : "'. $record['address'] .'",
-				"city" : "'. $record['city'] .'",
-				"state" : "'. $record['state'] .'",
-				"zip" : "'. $record['zip'] .'",
-				"company" : "'. $record['company'] .'",
-				"phone" : "'. $record['phone'] .'",
-				"fax" : "'. $record['fax'] .'",
-				"email" : "'. $record['email'] .'",
-				"web" : "'. $record['web'] .'",
-				"lat" : '. $record['lat'] .',
-				"lng" : '. $record['lng'] .'
-			}';			
+			$data['json'] = json_encode($record);
 		}
 
 		$this->load->view('json/data', $data);
@@ -74,10 +44,7 @@ class Admin extends CI_Controller{
 		
 		$this->rep->delete($id);
 
-		$data['json'] = '{
-
-			"success" : "true"
-		}';
+		$data['json'] = json_encode( array('success' => true) );
 
 		$this->load->view('json/data', $data);	
 	}

@@ -80,10 +80,12 @@ section#sr-reps-info{
 }
 section#sr-reps-info h2{
 	font-size: 14px;
+	font-style: italic;
+	font-weight: normal;
 	margin: 0;
 	padding: 0;
 	position: absolute;
-	top: 5px;
+	top: 7px;
 	left: 15px;
 }
 section#sr-reps-info .sr-rep{
@@ -131,36 +133,38 @@ section#sr-reps-info .sr-rep a:hover{
 }
 
 /*** Geolocator ***/
-.sr-geo{
-	background-color: #fafafa;
+#sr-geo{
+	background: #fafafa url(../img/geolocator.png) 20px 8px no-repeat;
 	border-bottom: 5px solid #eee;
 	color: #000;
 	font-size: 14px;
 	overflow: hidden;
-	padding: 10px 0;
-	text-align: center;
+	padding: 5px 30px 5px 70px;
 	width: 100%;
 }
-.sr-geo input, .sr-geo label{
-	float: left;
+#sr-geo div{
+	margin: 5px 0;
+}
+#sr-geo input, #sr-geo label{
+	display: inline-block;
 	margin: 3px 0 0 0;
 }
-.sr-geo label{
+#sr-geo label{
 	font-size: 12px;
 	line-height: 20px;
-	padding: 0 8px 0 0;
+	padding: 0 5px 0 10px;
 	text-align: right;
 	white-space: nowrap;
-	width: 6%;
 }
-.sr-geo input[type="textfield"]{
+#sr-geo input[type="textfield"]{
 	border: 1px solid #ccc;
 	background-color: #ddd;
 	color: #000;
 	height: 20px;
+	margin: 0 15px 0 0;
 	padding: 0 5px;
 }
-.sr-geo input[type="submit"]{
+#sr-geo input[type="submit"]{
 	background: #ffffff; /* Old browsers */
 	background: -moz-linear-gradient(top,  #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f1f1f1), color-stop(51%,#e1e1e1), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
@@ -172,32 +176,37 @@ section#sr-reps-info .sr-rep a:hover{
 	border: 1px solid #ccc;
 	color: #000;
 	cursor: pointer;
+	float: right;
 	font-family: Verdana, Arial;
 	font-size: 11px;
 	font-weight: bold;
-	height: 26px;
+	height: 30px;
 	line-height: 26px;
-	margin: 0 0 0 3%;
+	margin: 10px 0 0 0;
 	padding: 0 3px;
 	text-shadow: 1px 1px 0px #FFFFFF;
     filter: dropshadow(color=#FFFFFF, offx=1, offy=1);
 	text-transform: uppercase;
 	width: 9%;
 }
-.sr-geo label.sr-address{
-	width: 8%;
+#sr-geo label.sr-address,
+#sr-geo label.sr-city{
+	width: 100px;
 }
-.sr-geo input#sr-address{
-	width: 30%;
+#sr-geo input#sr-address{
+	width: 628px;
 }
-.sr-geo input#sr-city{
-	width: 14%;
+#sr-geo input#sr-city{
+	width: 100px
 }
-.sr-geo input#sr-state{
-	width: 8%;
+#sr-geo input#sr-state{
+	width: 80px;
 }
-.sr-geo input#sr-zip{
-	width: 8%;
+#sr-geo input#sr-zip{
+	width: 80px;
+}
+#sr-geo input#sr-country{
+	width: 100px;
 }
 
 /*** Edit Box ***/

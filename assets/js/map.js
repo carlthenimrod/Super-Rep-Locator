@@ -216,6 +216,7 @@ $(function(){
 				//create default option
 				option = $('<option />', {
 					html: '--- Select a Location ---',
+					selected: 'selected',
 					value: '0'
 				})
 				.prependTo( select );
@@ -282,6 +283,7 @@ $(function(){
 				//create default option
 				option = $('<option />', {
 					html: '--- Select a Location ---',
+					selected: 'selected',
 					value: '0'
 				})
 				.prependTo( select );
@@ -650,5 +652,5 @@ $(function(){
 	})();
 
 	//start map
-	srep.init();
+	if( $('#sr-map').length > 0 ) srep.init(); 
 });

@@ -1,21 +1,33 @@
 <div class="sr-ctn">
-	<div class="sr-geo">
+	<div id="sr-geo">
 		<form class="sr-search">
-			<label for="sr-address" class="sr-address">Address:</label>
-			<input type="textfield" id="sr-address" /><!-- #sr-address -->
+			<input type="submit" value="Locate" />
 
-			<label for="sr-city">City:</label>
-			<input type="textfield" id="sr-city" /><!-- #sr-city -->
+			<div>
+				<label for="sr-address" class="sr-address">Address:</label><!-- .sr-address -->
 
-			<label for="sr-state">State:</label>
-			<input type="textfield" id="sr-state" /><!-- #sr-state -->
+				<input type="textfield" id="sr-address" /><!-- #sr-address -->
+			</div>
 
-			<label for="sr-zip">Zip:</label>
-			<input type="textfield" id="sr-zip" /><!-- #sr-zip -->
+			<div>
+				<label for="sr-city" class="sr-city">City:</label><!-- .sr-state -->
 
-			<input type="submit" value="Search" />
+				<input type="textfield" id="sr-city" /><!-- #sr-city -->
+
+				<label for="sr-state">State / Province:</label>
+
+				<input type="textfield" id="sr-state" /><!-- #sr-state -->
+
+				<label for="sr-zip">Zip:</label>
+
+				<input type="textfield" id="sr-zip" /><!-- #sr-zip -->
+
+				<label for="sr-country">Country:</label>
+				
+				<input type="textfield" id="sr-country" /><!-- #sr-country -->
+			</div>
 		</form>
-	</div><!-- .sr-geo -->
+	</div><!-- #sr-geo -->
 
 	<div class="sr-body">
 		<div class="sr-map">
