@@ -131,7 +131,7 @@ $(function(){
 			//initialize chosen plugin
 			select.chosen({ 
 				disable_search_threshold: 10,
-				width: '200px'
+				width: '100%'
 			});
 		};
 
@@ -233,7 +233,7 @@ $(function(){
 				//initialize chosen plugin
 				select.chosen({ 
 					disable_search_threshold: 10,
-					width: '300px'
+					width: '100%'
 				});
 			}
 		};
@@ -300,7 +300,7 @@ $(function(){
 				//initialize chosen plugin
 				select.chosen({ 
 					disable_search_threshold: 10,
-					width: '300px'
+					width: '100%'
 				});
 			}
 		};

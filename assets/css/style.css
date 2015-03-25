@@ -6,11 +6,8 @@
 }
 body{
 	background-color: #EEE;
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 16px;
 	margin: 0 auto;
 	padding: 0;
-	width: 960px;
 }
 img{
 	border: none;
@@ -18,7 +15,10 @@ img{
 
 /*** Container ***/
 .sr-ctn{
-	margin: 20px 0 0 0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 16px;
+	padding: 20px 0 0 0;
+	width: 100%;
 }
 .sr-body{
 	background-color: #fafafa;
@@ -33,6 +33,9 @@ img{
 #sr-map{
 	height: 600px;
 	width: 100%;
+}
+#sr-map img{
+	max-width: none;
 }
 #sr-map .sr-rep a{
 	text-decoration: underline;
@@ -51,7 +54,7 @@ section#sr-locator h1{
 	border-bottom: 1px #ccc solid;
 	font-size: 18px;
 	margin: 0 0 5px 0;
-	padding: 0 0 5px 0;
+	padding: 0 0 5px 5px;
 }
 section#sr-locator .sr-select-menu .sr-select-label{
 	display: inline-block;
@@ -62,10 +65,12 @@ section#sr-locator .sr-select-menu .sr-select-label{
 section#sr-locator .sr-select-menu .sr-select-country{
 	display: inline-block;
 	margin: 0 0 0 10px;
+	width: 200px;
 }
 section#sr-locator .sr-select-menu .sr-select-location{
 	display: inline-block;
 	margin: 0 0 0 10px;
+	width: 300px;
 }
 
 /*** Rep Info ***/
@@ -358,4 +363,82 @@ article#sr-login section#sr-form button{
 	padding: 8px 15px;
 	text-shadow: 1px 1px 0px #FFFFFF;
     filter: dropshadow(color=#FFFFFF, offx=1, offy=1);
+}
+
+@media screen and (max-width: 640px) {
+
+	/*** Locator ***/
+	section#sr-locator h1{
+		border-bottom: 1px #ccc solid;
+		font-size: 20px;
+		padding: 5px 5px 5px 20px;
+	}
+	section#sr-locator .sr-select-menu .sr-select-label{
+		display: block;
+		font-style: normal;
+		padding: 10px 0;
+		text-align: center;
+	}
+	section#sr-locator .sr-select-menu .sr-select-country{
+		display: inline-block;
+		margin: 0 1%;
+		width: 48%;
+	}
+	section#sr-locator .sr-select-menu .sr-select-location{
+		display: inline-block;
+		margin: 0 1%;
+		width: 48%;
+	}
+
+	/*** Rep Info ***/
+	section#sr-reps-info{
+		max-height: none;
+		overflow: visible;
+	}
+	section#sr-reps-info .sr-rep{
+		width: 48%;
+	}
+}
+
+@media screen and (max-width: 480px) {
+
+	/*** Locator ***/
+	section#sr-locator h1{
+		font-size: 22px;
+		text-align: center;
+	}
+	section#sr-locator .sr-select-menu .sr-select-label{
+		font-size: 16px;
+	}
+	section#sr-locator .sr-select-menu .sr-select-country{
+		display: block;
+		margin: 5px;
+		width: auto;
+	}
+	section#sr-locator .sr-select-menu .sr-select-location{
+		display: block;
+		margin: 5px;
+		width: auto;
+	}
+
+	/*** Rep Info ***/
+	section#sr-reps-info{
+		padding: 10px;
+	}
+	section#sr-reps-info h2{
+		font-size: 16px;
+		font-style: normal;
+		font-weight: bold;
+		padding: 0 0 10px 0;
+		position: relative;
+		top: auto;
+		left: auto;
+		text-align: center;
+	}
+	section#sr-reps-info .sr-rep{
+		font-size: 14px;
+		line-height: 22px;
+		padding: 30px 20px;
+		width: 98%;
+	}
 }
