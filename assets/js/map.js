@@ -421,7 +421,7 @@ $(function(){
 				if( selectedLocation ) html = selectedLocation.long_name + ', ';
 				if( selectedCountry ) html += selectedCountry.long_name + ' - ';
 
-				html += markers.length + ' Reps Located';
+				html += markers.length + ' Distributors Located';
 
 				//store html
 				h2.html(html);

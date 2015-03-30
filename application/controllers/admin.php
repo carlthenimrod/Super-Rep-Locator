@@ -57,4 +57,19 @@ class Admin extends CI_Controller{
 
 		$this->load->view('json/data', $data);
 	}
+
+	function geolocator(){
+
+		$this->load->view('admin/geolocator');
+	}
+
+	function groups(){
+
+		$this->load->view('admin/groups');
+	}
+
+	function options(){
+
+		$this->load->view('admin/options');
+	}
 }

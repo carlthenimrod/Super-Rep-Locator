@@ -1,6 +1,6 @@
 <div class="sr-ctn">
 	<section id="sr-locator">
-		<h1>Sales Rep Locator</h1>
+		<h1>Distributor Locator</h1>
 	</section><!-- #sr-locator -->
 
 	<div id="sr-map"></div><!-- #sr-map -->

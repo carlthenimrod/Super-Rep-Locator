@@ -4,8 +4,9 @@ $(function(){
 
 		// Private Vars
 		//////////////////////
-		var map,
+		var map = false,
 			geocoder,
+			$admin = $('#sr-admin'),
 			activeMarker = false,
 			infoBoxHeight = false,
 			loading = false,
@@ -30,36 +31,126 @@ $(function(){
 				new google.maps.Point(10, 34)
 			);
 
-			//ajax on load, retrieve all db records
-			$.ajax({
+			//create geocoder
+			geocoder = new google.maps.Geocoder();
 
-				'url' : 'admin/all'
-			})
-			.done(function(data){
+			//load geolocator by default
+			loadGeolocator();
 
-				//store info
-				countries = data.countries;
-				locations = data.locations;
-				reps      = data.reps;
-
-				//create geocoder
-				geocoder = new google.maps.Geocoder();
-				
-				//create map, center on USA
-				map = new google.maps.Map(document.getElementById("sr-map"), {
-
-					center: new google.maps.LatLng(38.555474, -95.664999),
-					zoom: 4,
-					mapTypeId: google.maps.MapTypeId.ROADMAP
-				});
-
-				//create markers
-				createMarkers();
-			});
+			//change tab on click
+			$admin.find('nav li a').on('click', changeTab);
 		}
 
 		// Private Functions
 		//////////////////////
+		var changeTab = function(e){
+
+			var $this = $(this),
+				$nav,
+				selected;
+			
+			//get nav
+			$nav = $this.parents('nav');
+
+			//remove active from all tabs
+			$nav.find('a').removeClass('active');
+
+			//find selected
+			selected = $this.data('tab');
+
+			//empty all from admin
+			$admin.find('section').empty();
+
+			//set defaults
+			setDefaults();
+
+			//based on selected
+			switch( selected ){
+
+				case "geolocator" :
+				loadGeolocator();
+				break;
+
+				case "groups" :
+				loadGroups();
+				break;
+
+				case "options" :
+				loadOptions();
+				break;
+			}
+
+			//add active to tab
+			$this.addClass('active');
+
+			e.preventDefault();
+		};
+
+		var loadGeolocator = function(){
+
+			//load view
+			$.ajax('admin/geolocator').done(function(html){
+
+				//append html
+				$admin.find('section').append(html);
+
+				//get all reps
+				$.ajax('admin/all').done(function(data){
+
+					//store info
+					countries = data.countries;
+					locations = data.locations;
+					reps      = data.reps;
+					
+					//create map, center on USA
+					map = new google.maps.Map(document.getElementById("sr-map"), {
+
+						center: new google.maps.LatLng(38.555474, -95.664999),
+						zoom: 4,
+						mapTypeId: google.maps.MapTypeId.ROADMAP
+					});
+
+					//create markers
+					createMarkers();
+				});
+			});
+		};
+
+		var loadGroups = function(){
+
+			//load view
+			$.ajax('admin/groups').done(function(html){
+
+				//append html
+				$admin.find('section').append(html);
+			});
+		};
+
+		var loadOptions = function(){
+
+			//load view
+			$.ajax('admin/options').done(function(html){
+
+				//append html
+				$admin.find('section').append(html);
+			});
+		};
+
+		var setDefaults = function(){
+
+			map = false,
+			activeMarker = false,
+			infoBoxHeight = false,
+			loading = false,
+			markers = [],
+			timeout = false,
+			country = false,
+			location = false,
+			countries = false,
+			locations = false,
+			reps = false;
+		};
+
 		var createMarkers = function(){
 
 			var location,
@@ -769,6 +860,6 @@ $(function(){
 		}
 	})();
 
-	//start map
-	if( $('.sr-map').length > 0 ) admin.init(); 
+	//start admin
+	admin.init(); 
 });

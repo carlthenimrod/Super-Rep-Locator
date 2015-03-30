@@ -8,6 +8,7 @@ body{
 	background-color: #EEE;
 	margin: 0 auto;
 	padding: 0;
+	width: 960px;
 }
 img{
 	border: none;
@@ -137,31 +138,11 @@ section#sr-reps-info .sr-rep a:hover{
 	text-decoration: none;
 }
 
-/*** Geolocator ***/
-#sr-geo{
-	background: #fafafa url(../img/geolocator.png) 20px 8px no-repeat;
-	border-bottom: 5px solid #eee;
-	color: #000;
-	font-size: 14px;
-	overflow: hidden;
-	padding: 5px 30px 5px 70px;
-	width: 100%;
-}
-#sr-geo div{
-	margin: 5px 0;
-}
-#sr-geo input, #sr-geo label{
-	display: inline-block;
-	margin: 3px 0 0 0;
-}
-#sr-geo label{
-	font-size: 12px;
-	line-height: 20px;
-	padding: 0 5px 0 10px;
-	text-align: right;
-	white-space: nowrap;
-}
-#sr-geo input[type="textfield"]{
+/***** Admin *****
+*************************/
+
+/*** Global ***/
+#sr-admin input{
 	border: 1px solid #ccc;
 	background-color: #ddd;
 	color: #000;
@@ -169,7 +150,7 @@ section#sr-reps-info .sr-rep a:hover{
 	margin: 0 15px 0 0;
 	padding: 0 5px;
 }
-#sr-geo input[type="submit"]{
+#sr-admin button{
 	background: #ffffff; /* Old browsers */
 	background: -moz-linear-gradient(top,  #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f1f1f1), color-stop(51%,#e1e1e1), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
@@ -181,41 +162,96 @@ section#sr-reps-info .sr-rep a:hover{
 	border: 1px solid #ccc;
 	color: #000;
 	cursor: pointer;
-	float: right;
 	font-family: Verdana, Arial;
 	font-size: 11px;
 	font-weight: bold;
-	height: 30px;
-	line-height: 26px;
-	margin: 10px 0 0 0;
 	padding: 0 3px;
 	text-shadow: 1px 1px 0px #FFFFFF;
     filter: dropshadow(color=#FFFFFF, offx=1, offy=1);
 	text-transform: uppercase;
+}
+
+/*** Navigation ***/
+#sr-admin nav{
+	padding: 0 0 5px 0;
+}
+#sr-admin nav ul{
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+#sr-admin nav li{
+	display: inline-block;
+}
+#sr-admin nav a{
+	background-color: #fafafa;
+	color: #aaa;
+	display: inline-block;
+	font-size: 14px;
+	padding: 5px 15px;
+	text-align: center;
+	text-decoration: none;
+}
+#sr-admin nav a:hover{
+	color: #666;
+}
+#sr-admin nav a.active{
+	color: #333;
+}
+
+/*** Geolocator ***/
+#sr-admin #sr-geo{
+	background: #fafafa url(../img/geolocator.png) 20px 8px no-repeat;
+	color: #000;
+	font-size: 14px;
+	overflow: hidden;
+	margin: 0 0 5px 0;
+	padding: 5px 30px 5px 70px;
+	width: 100%;
+}
+#sr-admin #sr-geo div{
+	margin: 5px 0;
+}
+#sr-admin #sr-geo input, #sr-geo label{
+	display: inline-block;
+	margin: 3px 0 0 0;
+}
+#sr-admin #sr-geo label{
+	font-size: 12px;
+	line-height: 20px;
+	padding: 0 5px 0 10px;
+	text-align: right;
+	white-space: nowrap;
+}
+#sr-admin #sr-geo button{
+	float: right;
+	height: 30px;
+	line-height: 26px;
+	margin: 10px 0 0 0;
 	width: 9%;
 }
-#sr-geo label.sr-address,
-#sr-geo label.sr-city{
+#sr-admin #sr-geo label.sr-address,
+#sr-admin #sr-geo label.sr-city{
 	width: 100px;
 }
-#sr-geo input#sr-address{
+#sr-admin #sr-geo input#sr-address{
 	width: 628px;
 }
-#sr-geo input#sr-city{
+#sr-admin #sr-geo input#sr-city{
 	width: 100px
 }
-#sr-geo input#sr-state{
+#sr-admin #sr-geo input#sr-state{
 	width: 80px;
 }
-#sr-geo input#sr-zip{
+#sr-admin #sr-geo input#sr-zip{
 	width: 80px;
 }
-#sr-geo input#sr-country{
+#sr-admin #sr-geo input#sr-country{
 	width: 100px;
 }
 
-/*** Edit Box ***/
-.sr-edit-info{
+/** Edit Box **/
+#sr-admin .sr-edit-info{
 	background: rgba(245, 245, 245, 0.95);
 	border-bottom: 1px solid #ccc;
 	display: none;
@@ -227,10 +263,10 @@ section#sr-reps-info .sr-rep a:hover{
 	width: 100%;
 	z-index: 9999;
 }
-.sr-edit-info label, .sr-edit-info input[type="textfield"]{
+#sr-admin .sr-edit-info label, .sr-edit-info input[type="textfield"]{
 	margin: 4px 0;
 }
-.sr-edit-info label{
+#sr-admin .sr-edit-info label{
 	color: #000;
 	font-size: 13px;
 	float: left;
@@ -240,7 +276,7 @@ section#sr-reps-info .sr-rep a:hover{
 	white-space: nowrap;
 	width: 10%;
 }
-.sr-edit-info input[type="textfield"]{
+#sr-admin .sr-edit-info input[type="textfield"]{
 	border: 1px solid #ccc;
 	background-color: #ddd;
 	color: #000;
@@ -250,38 +286,23 @@ section#sr-reps-info .sr-rep a:hover{
 	padding: 0 5px;
 	width: 37%;
 }
-.sr-edit-info .sr-btns{
+#sr-admin .sr-edit-info .sr-btns{
 	clear: both;
 	padding: 12px 10px 0 0;
 	text-align: right;
 }
-.sr-edit-info button{
-	background: #ffffff; /* Old browsers */
-	background: -moz-linear-gradient(top,  #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f1f1f1), color-stop(51%,#e1e1e1), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* IE10+ */
-	background: linear-gradient(to bottom,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
-	border: 1px solid #ccc;
-	cursor: pointer;
-	font-family: Verdana;
-	font-size: 11px;
-	font-weight: bold;
+#sr-admin .sr-edit-info button{
 	padding: 4px 8px;
-	text-shadow: 1px 1px 0px #FFFFFF;
-    filter: dropshadow(color=#FFFFFF, offx=1, offy=1);
 }
-.sr-loading{
+#sr-admin .sr-loading{
 	display: none;
 	position: absolute;
 	bottom: 10px;
 	left: 50px;
 }
 
-/*** Message Window ***/
-.sr-msg{
+/** Message Window **/
+#sr-admin .sr-msg{
 	background: rgba(245, 245, 245, 0.95);
 	border-top: 1px solid #ccc;
 	color: #D00;
@@ -298,6 +319,21 @@ section#sr-reps-info .sr-rep a:hover{
 	width: 100%;
 	z-index: 9999;
 }
+
+/*** Groups ***/
+#sr-groups{
+}
+#sr-groups section#sr-create{
+	background: #fafafa url(../img/groups.png) 20px 8px no-repeat;
+	min-height: 80px;
+	padding: 0 0 0 110px;
+}
+#sr-groups section#sr-create h1{
+	padding: 0;
+	margin: 0;
+}
+
+/*** Options ***/
 
 /*** Login Form ***/
 article#sr-login{
@@ -332,37 +368,18 @@ article#sr-login section#sr-form div label{
 	display: inline-block;
 	font-size: 12px;
 	text-align: right;
-	width: 30%;
+	width: 25%;
 }
 article#sr-login section#sr-form div input{
-	border: 1px solid #ccc;
-	background-color: #ddd;
-	color: #000;
 	display: inline-block;
-	height: 20px;
-	padding: 0 5px;
 	width: 65%;
 }
 article#sr-login section#sr-form button{
-	background: #ffffff; /* Old browsers */
-	background: -moz-linear-gradient(top,  #ffffff 0%, #f1f1f1 50%, #e1e1e1 51%, #f6f6f6 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffffff), color-stop(50%,#f1f1f1), color-stop(51%,#e1e1e1), color-stop(100%,#f6f6f6)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* IE10+ */
-	background: linear-gradient(to bottom,  #ffffff 0%,#f1f1f1 50%,#e1e1e1 51%,#f6f6f6 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0 ); /* IE6-9 */
-	border: 1px solid #ccc;
-	cursor: pointer;
 	display: block;
 	float: right;
-	font-family: Verdana;
 	font-size: 14px;
-	font-weight: bold;
-	margin: 10px 60px 0 0;
+	margin: 20px 40px 0 0;
 	padding: 8px 15px;
-	text-shadow: 1px 1px 0px #FFFFFF;
-    filter: dropshadow(color=#FFFFFF, offx=1, offy=1);
 }
 
 @media screen and (max-width: 640px) {
