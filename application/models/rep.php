@@ -148,20 +148,36 @@ class rep extends CI_Model{
 		$this->db->where('id', $id);
 		$this->db->delete('rep');
 
-		//count remaining reps
-		$reps_count = $this->reps_remaining($location_id);
+		//if we have location
+		if($location_id){
 
-		//if no more reps
-		if($reps_count == 0){
+			//count remaining reps
+			$reps_count = $this->reps_remaining($location_id, 'location_id');
 
-			//delete location
-			$this->location->delete($location_id);
+			//if no more reps
+			if($reps_count == 0){
 
-			//count remaining locations
-			$locations_count = $this->location->locations_remaining($country_id);
+				//delete location
+				$this->location->delete($location_id);
 
-			//if no more locations
-			if($locations_count == 0){
+				//count remaining locations
+				$locations_count = $this->location->locations_remaining($country_id);
+
+				//if no more locations
+				if($locations_count == 0){
+
+					//delete country
+					$this->country->delete($country_id);
+				}
+			}
+		}
+		else{
+
+			//count remaining reps
+			$reps_count = $this->reps_remaining($country_id, 'country_id');
+
+			//if no more reps
+			if($reps_count == 0){
 
 				//delete country
 				$this->country->delete($country_id);
@@ -205,11 +221,11 @@ class rep extends CI_Model{
 		}
 	}
 
-	function reps_remaining($id){
+	function reps_remaining($id, $where){
 
 		$this->db->select('id');
 		$this->db->from('rep');
-		$this->db->where('location_id', $id);
+		$this->db->where($where, $id);
 
 		$query = $this->db->get();
 

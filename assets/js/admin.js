@@ -4,19 +4,12 @@ $(function(){
 
 		// Private Vars
 		//////////////////////
-		var map = false,
+		var $admin = $('#sr-admin'),
 			geocoder,
-			$admin = $('#sr-admin'),
-			activeMarker = false,
-			infoBoxHeight = false,
+			map,
+			options,
 			loading = false,
-			markers = [],
 			timeout = false,
-			country = false,
-			location = false,
-			countries = false,
-			locations = false,
-			reps = false,
 			pinImage;
 
 
@@ -34,8 +27,15 @@ $(function(){
 			//create geocoder
 			geocoder = new google.maps.Geocoder();
 
+			$.ajax('admin/options').done(function( options ){
+
+				options = options;
+			});
+
 			//load geolocator by default
-			loadGeolocator();
+			//loadGeolocator();
+
+			loadGroups();
 
 			//change tab on click
 			$admin.find('nav li a').on('click', changeTab);
@@ -47,6 +47,7 @@ $(function(){
 
 			var $this = $(this),
 				$nav,
+				$loading,
 				selected;
 			
 			//get nav
@@ -58,11 +59,15 @@ $(function(){
 			//find selected
 			selected = $this.data('tab');
 
+			//create loading
+			$loading = $('<div />', { id: 'sr-loading' });
+
 			//empty all from admin
-			$admin.find('section').empty();
+			$admin.find('section').empty().append( $loading );
 
 			//set defaults
-			setDefaults();
+			loading = false;
+			timeout = false;
 
 			//based on selected
 			switch( selected ){
@@ -75,8 +80,8 @@ $(function(){
 				loadGroups();
 				break;
 
-				case "options" :
-				loadOptions();
+				case "settings" :
+				loadSettings();
 				break;
 			}
 
@@ -86,21 +91,120 @@ $(function(){
 			e.preventDefault();
 		};
 
+		var loadSettings = function(){
+
+			//load view
+			$.ajax('admin/settings').done(function(html){
+
+				//empty all from admin - remove loader
+				$admin.find('section').empty();
+
+				//append html
+				$admin.find('section').append(html);
+			});
+		};
+
+		// Groups
+		//////////////////////
+		var loadGroups = function(){
+
+			//load view
+			$.ajax('admin/groups').done(function(html){
+
+				//empty all from admin - remove loader
+				$admin.find('section').empty();
+
+				//append html
+				$admin.find('section').append(html);
+
+				//events
+				$('#sr-create form').on('submit', newGroup);
+			});
+		};
+
+		var newGroup = function(e){
+
+			var $this = $(this),
+				data = {};
+
+			//get name
+			data.name = $this.find('#sr-group-name').val();
+
+			//find if default is checked
+			if( $this.find('#sr-default').is(':checked') ){
+
+				data.default = 1;
+			}
+			else{
+
+				data.default = 0;
+			}
+
+			//save group
+			$.ajax({
+
+				data: data,
+				type: 'POST',
+				url: 'groups/save'
+			})
+			.done(function(result){
+
+				var $errors;
+
+				if( result.id ){
+
+					//remove any existing errors
+					$('#sr-errors').remove();
+
+					//remove no groups message
+					$('#sr-manage').find('p').remove();
+
+					//TODO add success stuff
+					console.log(result);
+				}
+				else if( result.errors ){
+
+					//remove any existing errors
+					$('#sr-errors').remove();
+
+					//create errors div
+					$errors = $('<div />', { 
+						html: result.errors,
+						id: 'sr-errors' });
+
+					//insert errors
+					$errors.insertAfter('#sr-create')
+
+					//animate, remove
+					$errors.delay(2000).slideUp(200, function(){
+
+						//remove
+						$errors.remove();
+					});
+
+					//fade text out
+					$errors.find('p').delay(2000).animate({ opacity: 0 }, 100);
+				}
+			});
+
+			e.preventDefault();
+		};
+
+		// Geolocator
+		//////////////////////
 		var loadGeolocator = function(){
 
 			//load view
 			$.ajax('admin/geolocator').done(function(html){
+
+				//empty all from admin - remove loader
+				$admin.find('section').empty();
 
 				//append html
 				$admin.find('section').append(html);
 
 				//get all reps
 				$.ajax('admin/all').done(function(data){
-
-					//store info
-					countries = data.countries;
-					locations = data.locations;
-					reps      = data.reps;
 					
 					//create map, center on USA
 					map = new google.maps.Map(document.getElementById("sr-map"), {
@@ -110,52 +214,40 @@ $(function(){
 						mapTypeId: google.maps.MapTypeId.ROADMAP
 					});
 
+					//set data
+					map.sr = {
+
+						activeMarker: false,
+						country: false,
+						countries: data.countries,
+						infoBoxHeight: false,
+						location: false,
+						locations: data.locations,
+						markers: [],
+						reps: data.reps
+					}
+
 					//create markers
 					createMarkers();
 				});
+
+				//events
+				$('form.sr-search').on('submit', searchRep);
+				$('form.sr-info').on('submit', saveRep);
+				$('.sr-delete').on('click', deleteRep);
+				$('.sr-hide').on('click', hideInfoBox);
 			});
-		};
-
-		var loadGroups = function(){
-
-			//load view
-			$.ajax('admin/groups').done(function(html){
-
-				//append html
-				$admin.find('section').append(html);
-			});
-		};
-
-		var loadOptions = function(){
-
-			//load view
-			$.ajax('admin/options').done(function(html){
-
-				//append html
-				$admin.find('section').append(html);
-			});
-		};
-
-		var setDefaults = function(){
-
-			map = false,
-			activeMarker = false,
-			infoBoxHeight = false,
-			loading = false,
-			markers = [],
-			timeout = false,
-			country = false,
-			location = false,
-			countries = false,
-			locations = false,
-			reps = false;
 		};
 
 		var createMarkers = function(){
 
 			var location,
 				marker,
+				reps,
 				i, l;
+
+			//get reps
+			reps = map.sr.reps;
 
 			for(i = 0, l = reps.length; i < l; ++i){
 
@@ -190,7 +282,7 @@ $(function(){
 				google.maps.event.addListener(marker, 'click', markerClick);
 
 				//add to markers array
-				markers.push(marker);
+				map.sr.markers.push(marker);
 			}
 		};
 
@@ -200,16 +292,16 @@ $(function(){
 			showInfoBox(this.attr);
 
 			//if no marker attributes, just remove altogether
-			if(!activeMarker.attr && activeMarker) activeMarker.setMap(null);
+			if(!map.sr.activeMarker.attr && map.sr.activeMarker) map.sr.activeMarker.setMap(null);
 
 			//if active marker is saved, set default image
-			if(activeMarker.attr) activeMarker.setIcon(null);
+			if(map.sr.activeMarker.attr) map.sr.activeMarker.setIcon(null);
 
 			//this is active marker now
-			activeMarker = this;
+			map.sr.activeMarker = this;
 
 			//set active marker icon to active
-			activeMarker.setIcon(pinImage);
+			map.sr.activeMarker.setIcon(pinImage);
 		};
 
 		var showInfoBox = function(obj){
@@ -240,7 +332,7 @@ $(function(){
 			if(editBox.css('display') === 'block') return;
 
 			//set height
-			if(!infoBoxHeight) infoBoxHeight = editBox.css('height');
+			if(!map.sr.infoBoxHeight) map.sr.infoBoxHeight = editBox.css('height');
 
 			//set height to zero
 			editBox.css({
@@ -254,7 +346,7 @@ $(function(){
 			});
 
 			editBox.animate({
-				'height' : infoBoxHeight
+				'height' : map.sr.infoBoxHeight
 			}, 100, function(){
 
 				children.animate({
@@ -455,9 +547,7 @@ $(function(){
 			return obj;
 		};
 
-		// Events
-		/////////////////////////////
-		$('form.sr-search').on('submit', function(e){
+		var searchRep = function(e){
 
 			e.preventDefault();
 
@@ -478,10 +568,10 @@ $(function(){
 			if(ctry) full_address         += ctry;
 
 			//set icon back to default
-			if(activeMarker) activeMarker.setIcon(null);
+			if(map.sr.activeMarker) map.sr.activeMarker.setIcon(null);
 
 			//if new marker exists, remove
-			if(!activeMarker.attr && activeMarker) activeMarker.setMap(null);
+			if(!map.sr.activeMarker.attr && map.sr.activeMarker) map.sr.activeMarker.setMap(null);
 
 			//get lat/lng of full_address
 			geocoder.geocode({'address' : full_address}, function(results, status){
@@ -489,28 +579,28 @@ $(function(){
 				if(status == google.maps.GeocoderStatus.OK){
 
 					//find country
-					country = findCountry( results[0].address_components );
+					map.sr.country = findCountry( results[0].address_components );
 
 					//find location
-					location = findLocation( results[0].address_components );
+					map.sr.location = findLocation( results[0].address_components );
 
 					//check if already present
 					$.when( 
-						$.ajax( 'countries/check', { data: country, type: 'POST' } ), 
-						$.ajax( 'locations/check', { data: location, type: 'POST' } ) 
+						$.ajax( 'countries/check', { data: map.sr.country, type: 'POST' } ), 
+						$.ajax( 'locations/check', { data: map.sr.location, type: 'POST' } ) 
 					)
 					.then(function(c, l){
 
 						//store ids
-						country.id  = c[0];
-						location.id = l[0];
+						map.sr.country.id  = c[0];
+						map.sr.location.id = l[0];
 
 						//get coords
-						country  = getCoords(country, country.long_name);
-						location = getCoords(location, location.short_name + ', ' + country.long_name);
+						map.sr.country  = getCoords(map.sr.country, map.sr.country.long_name);
+						map.sr.location = getCoords(map.sr.location, map.sr.location.short_name + ', ' + map.sr.country.long_name);
 
 						//if results missing
-						if( !country ){
+						if( !map.sr.country ){
 
 							//show error
 							showErrorMessage('Please be more specific with location.');
@@ -518,8 +608,8 @@ $(function(){
 							$('.sr-edit-info').hide();
 
 							//set back to false
-							country = false;
-							location = false;
+							map.sr.country = false;
+							map.sr.location = false;
 
 							return;
 						}
@@ -529,7 +619,7 @@ $(function(){
 						map.setZoom(4);
 						
 						//create marker
-						activeMarker = new google.maps.Marker({
+						map.sr.activeMarker = new google.maps.Marker({
 							draggable: true,
 							map: map,
 							position: results[0].geometry.location,
@@ -551,8 +641,8 @@ $(function(){
 					}, function(){
 
 						//set back to false
-						country = false;
-						location = false;
+						map.sr.country = false;
+						map.sr.location = false;
 
 						$('.sr-edit-info').hide();
 
@@ -592,9 +682,9 @@ $(function(){
 					showErrorMessage('Unknown Error, Contact Administrator');
 				}
 			});
-		});
+		};
 
-		$('form.sr-info').on('submit', function(e){
+		var saveRep = function(e){
 
 			var name    = $(this).find('input#sr-name').val(),
 				address = $(this).find('input#sr-address').val(),
@@ -616,8 +706,8 @@ $(function(){
 			e.preventDefault();
 
 			//set lat/lng
-			lat = activeMarker.position.lat();
-			lng = activeMarker.position.lng();
+			lat = map.sr.activeMarker.position.lat();
+			lng = map.sr.activeMarker.position.lng();
 
 			data = {
 				'name' : name.trim(),
@@ -639,41 +729,41 @@ $(function(){
 			if(id) data.id = id;
 
 			//if country
-			if( country ){
+			if( map.sr.country ){
 
 				//set country data
-				if( parseInt(country.id) ){
+				if( parseInt(map.sr.country.id) ){
 
-					data.country_id = country.id;
+					data.country_id = map.sr.country.id;
 				}
 				else{ //set extra info
 
-					data.country_id         = country.id;
-					data.country_short_name = country.short_name;
-					data.country_long_name  = country.long_name;
-					data.country_lat        = country.coords[0];
-					data.country_lng        = country.coords[1];
+					data.country_id         = map.sr.country.id;
+					data.country_short_name = map.sr.country.short_name;
+					data.country_long_name  = map.sr.country.long_name;
+					data.country_lat        = map.sr.country.coords[0];
+					data.country_lng        = map.sr.country.coords[1];
 				}
 			}
 
 			//if location
-			if( location ){
+			if( map.sr.location ){
 
 				//location present
 				data.location = true;
 
 				//set location data
-				if( parseInt(location.id) ){
+				if( parseInt(map.sr.location.id) ){
 
-					data.location_id         = location.id;
+					data.location_id         = map.sr.location.id;
 				}
 				else{ //set extra info
 
-					data.location_id         = location.id;
-					data.location_short_name = location.short_name;
-					data.location_long_name  = location.long_name;
-					data.location_lat        = location.coords[0];
-					data.location_lng        = location.coords[1];
+					data.location_id         = map.sr.location.id;
+					data.location_short_name = map.sr.location.short_name;
+					data.location_long_name  = map.sr.location.long_name;
+					data.location_lat        = map.sr.location.coords[0];
+					data.location_lng        = map.sr.location.coords[1];
 				}
 			}
 			else{
@@ -707,11 +797,11 @@ $(function(){
 				$('.sr-search')[0].reset();
 
 				//if no attribute are set, add to marker array
-				if(!activeMarker.attr){
+				if(!map.sr.activeMarker.attr){
 
-					marker = activeMarker;
+					marker = map.sr.activeMarker;
 
-					activeMarker = false;
+					map.sr.activeMarker = false;
 
 					marker.attr = {
 
@@ -734,7 +824,7 @@ $(function(){
 
 					google.maps.event.addListener(marker, 'click', markerClick);
 
-					markers.push(marker);
+					map.sr.markers.push(marker);
 
 					//not loading
 					loading = false;
@@ -743,16 +833,16 @@ $(function(){
 				}
 				else{
 
-					marker = activeMarker;
+					marker = map.sr.activeMarker;
 
-					activeMarker = false;
+					map.sr.activeMarker = false;
 
 					marker.setIcon(null);
 
 					//remove and replace marker
 					if(marker != -1) {
 
-						markers.splice(marker, 1);
+						map.sr.markers.splice(marker, 1);
 
 						marker.attr = {
 
@@ -771,7 +861,7 @@ $(function(){
 							'lng' : data.lng
 						}
 
-						markers.push(marker);
+						map.sr.markers.push(marker);
 
 						//not loading
 						loading = false;
@@ -788,9 +878,9 @@ $(function(){
 
 				showErrorMessage('Unable to Save, Try Again and Contact Administrator if Problem Persists.');
 			});
-		});
+		};
 
-		$('.sr-delete').on('click', function(){
+		var deleteRep = function(){
 
 			var data;
 
@@ -798,22 +888,22 @@ $(function(){
 
 			if(confirm('DELETE: Are you sure?')){
 
-				if(!activeMarker.attr && activeMarker){
+				if(!map.sr.activeMarker.attr && map.sr.activeMarker){
 
 					//remove marker
-					activeMarker.setMap(null);
+					map.sr.activeMarker.setMap(null);
 
 					//clear inputs, hide edit window
 					$('.sr-edit-info').hide().find('input').val('');				
 				}
-				else if(activeMarker.attr){
+				else if(map.sr.activeMarker.attr){
 
 					//now loading
 					loading = true;
 					$('.sr-loading').css('display', 'block');
 
 					//create data to send
-					data = { id: activeMarker.attr.id };
+					data = { id: map.sr.activeMarker.attr.id };
 
 					//do ajax, remove from DB
 					$.ajax({
@@ -832,7 +922,7 @@ $(function(){
 							$('.sr-edit-info').css('display', 'none');
 
 							//remove marker
-							activeMarker.setMap(null);
+							map.sr.activeMarker.setMap(null);
 						}
 
 						//not loading
@@ -850,9 +940,7 @@ $(function(){
 					});		
 				}
 			}
-		});
-
-		$('.sr-hide').on('click', hideInfoBox);
+		};
 
 		return {
 

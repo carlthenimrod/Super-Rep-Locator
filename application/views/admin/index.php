@@ -10,7 +10,7 @@
 			</li>
 
 			<li>
-				<a href="#" data-tab="options" title="Options">Options</a>
+				<a href="#" data-tab="settings" title="Settings">Settings</a>
 			</li>
 		</ul>
 	</nav>

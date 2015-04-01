@@ -184,11 +184,11 @@ section#sr-reps-info .sr-rep a:hover{
 	display: inline-block;
 }
 #sr-admin nav a{
-	background-color: #fafafa;
+	background-color: #f6f6f6;
 	color: #aaa;
 	display: inline-block;
-	font-size: 14px;
-	padding: 5px 15px;
+	font-size: 16px;
+	padding: 7px 20px;
 	text-align: center;
 	text-decoration: none;
 }
@@ -196,17 +196,26 @@ section#sr-reps-info .sr-rep a:hover{
 	color: #666;
 }
 #sr-admin nav a.active{
+	background-color: #fafafa;
 	color: #333;
+}
+
+/*** Main Section ***/
+#sr-admin > section #sr-loading{
+	background: #fafafa url(../img/ajax-tab-loader.gif) center center no-repeat;
+	margin: 0 0 5px 0;
+	min-height: 200px;
 }
 
 /*** Geolocator ***/
 #sr-admin #sr-geo{
-	background: #fafafa url(../img/geolocator.png) 20px 8px no-repeat;
+	background: #fafafa url(../img/geolocator.png) 20px 12px no-repeat;
 	color: #000;
 	font-size: 14px;
 	overflow: hidden;
 	margin: 0 0 5px 0;
-	padding: 5px 30px 5px 70px;
+	min-height: 80px;
+	padding: 7px 30px 5px 70px;
 	width: 100%;
 }
 #sr-admin #sr-geo div{
@@ -217,7 +226,7 @@ section#sr-reps-info .sr-rep a:hover{
 	margin: 3px 0 0 0;
 }
 #sr-admin #sr-geo label{
-	font-size: 12px;
+	font-size: 14px;
 	line-height: 20px;
 	padding: 0 5px 0 10px;
 	text-align: right;
@@ -227,7 +236,7 @@ section#sr-reps-info .sr-rep a:hover{
 	float: right;
 	height: 30px;
 	line-height: 26px;
-	margin: 10px 0 0 0;
+	margin: 13px 0 0 0;
 	width: 9%;
 }
 #sr-admin #sr-geo label.sr-address,
@@ -247,7 +256,7 @@ section#sr-reps-info .sr-rep a:hover{
 	width: 80px;
 }
 #sr-admin #sr-geo input#sr-country{
-	width: 100px;
+	width: 117px;
 }
 
 /** Edit Box **/
@@ -322,16 +331,64 @@ section#sr-reps-info .sr-rep a:hover{
 
 /*** Groups ***/
 #sr-groups{
+
 }
 #sr-groups section#sr-create{
-	background: #fafafa url(../img/groups.png) 20px 8px no-repeat;
-	min-height: 80px;
-	padding: 0 0 0 110px;
+	background: #fafafa url(../img/groups.png) 20px center no-repeat;
+	margin: 0 0 5px 0;
+	padding: 15px 0 15px 110px;
 }
-#sr-groups section#sr-create h1{
-	padding: 0;
+#sr-groups section#sr-create form{
+	position: relative;
+	text-align: center;
+}
+#sr-groups section#sr-create form label{
+	font-size: 14px;
+	padding: 0 5px 0 0;
+}
+#sr-groups section#sr-create form label:nth-child(3){
+	font-size: 12px;
+	font-style: italic;
+}
+#sr-groups section#sr-create form input[type="text"]{
+	width: 400px;
+}
+#sr-groups section#sr-create form input[type="checkbox"]{
+	margin: 0 50px 0 0;
+	position: relative;
+	top: 5px;
+}
+#sr-groups section#sr-create form button{
+	padding: 7px 20px;
+}
+#sr-groups div#sr-errors{
+	background: #fafafa;
+	color: #f00;
+	font-size: 12px;
+	margin: 0 0 5px 0;
+	padding: 10px 0;
+	text-align: center;
+}
+#sr-groups div#sr-errors p{
 	margin: 0;
+	padding: 5px 0;
 }
+#sr-groups section#sr-manage{
+	background: #fafafa;
+}
+#sr-groups section#sr-manage > p{
+	color: #999;
+	margin: 0;
+	padding: 100px 0;
+	text-align: center;
+}
+#sr-groups #sr-loading{
+	background-color: #fafafa;
+	margin: 0 0 5px 0;
+	padding: 20px 0;
+	text-align: center;
+}
+
 
 /*** Options ***/
 

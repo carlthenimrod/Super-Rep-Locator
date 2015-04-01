@@ -65,11 +65,24 @@ class Admin extends CI_Controller{
 
 	function groups(){
 
-		$this->load->view('admin/groups');
+		$data = array();
+
+		$data['groups'] = $this->group->all();
+
+		$this->load->view('admin/groups', $data);
+	}
+
+	function settings(){
+
+		$this->load->view('admin/settings');
 	}
 
 	function options(){
 
-		$this->load->view('admin/options');
+		$options = $this->options->get();
+
+		$data['json'] = json_encode( $options );
+
+		$this->load->view('json/data', $data);
 	}
 }

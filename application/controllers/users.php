@@ -27,10 +27,15 @@ class Users extends CI_Controller{
 				//check to see if user exists
 				if($this->form_validation->run() ){
 
+					//get user
+					$user = $this->user->get( $this->input->post('email') );
+
 					//set session info
 					$data = array(
 
-						'email'     => $this->input->post('email'),
+						'id'        => $user->id,
+						'name'      => $user->name,
+						'email'     => $user->email,
 						'logged_in' => true
 					);
 
@@ -53,6 +58,7 @@ class Users extends CI_Controller{
 
 	function logout(){
 
+		$this->session->unset_userdata('id');
 		$this->session->unset_userdata('email');
 		$this->session->unset_userdata('logged_in');
 

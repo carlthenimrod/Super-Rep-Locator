@@ -1,15 +1,23 @@
 <div id="sr-groups">
 	<section id="sr-create">
-		<h1>Create Groups</h1>
-
 		<form>
-			<input type="text" />
+			<label for="sr-group-name">New Group:</label>
 
-			<button type="submit">Create</button>
+			<input type="text" id="sr-group-name" name="sr-group-name" />
+
+			<label for="sr-default">Set as Default</label>
+
+			<input type="checkbox" id="sr-default" />
+
+			<button type="submit">Add</button>
 		</form>
 	</section><!-- #sr-create -->
 
 	<section id="sr-manage">
+		<?php if( $groups ) : ?>
 
+		<?php else : ?>
+			<p>No Groups - Add Some?</p>
+		<?php endif; ?>
 	</section><!-- #sr-manage -->
 </div><!-- #sr-groups -->

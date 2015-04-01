@@ -19,4 +19,15 @@
 				return false;
 			}
 		}
+
+		function get($email){
+
+			$this->db->select('*');
+			$this->db->from('user');
+			$this->db->where('email', $email);
+
+			$query = $this->db->get();
+
+			return $query->row();
+		}
 	}
