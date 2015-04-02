@@ -15,7 +15,35 @@
 
 	<section id="sr-manage">
 		<?php if( $groups ) : ?>
+			<table>
+				<tr>
+					<th colspan="2">Group Info</th>
 
+					<th colspan="2">Actions</th>
+				</tr>
+
+				<?php foreach( $groups as $g ) : ?>
+					<tr class="sr-group" data-id="<?= $g->id; ?>">
+						<td>
+							<?= $g->name; ?>
+						</td>
+
+						<td>
+							<label for="sr-group-default">Default: </label>
+
+							<input type="checkbox" <?php if( $g->default ) echo 'checked="checked"'; ?> id="sr-group-default" name="sr-group-default" />
+						</td>
+
+						<td></td>
+
+						<td>
+							<img src="<?= base_url('assets/img/edit.png'); ?>" class="sr-edit" alt="Edit" title="Edit" />
+
+							<img src="<?= base_url('assets/img/delete.png'); ?>" class="sr-delete" alt="Delete" title="Delete" />
+						</td>
+					</tr><!-- .sr-group -->
+				<?php endforeach; ?>
+			</table>
 		<?php else : ?>
 			<p>No Groups - Add Some?</p>
 		<?php endif; ?>

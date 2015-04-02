@@ -29,4 +29,10 @@ class group extends CI_Model{
 
 		return $this->db->insert_id();
 	}
+
+	function delete($id){
+
+		$this->db->where('id', $id);
+		$this->db->delete('group'); 
+	}
 }

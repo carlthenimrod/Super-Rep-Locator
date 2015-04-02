@@ -2,6 +2,15 @@
 
 class Groups extends CI_Controller{
 
+	function all(){
+
+		$groups = $this->group->all();
+
+		$data['json'] = json_encode($groups);
+
+		$this->load->view('json/data', $data);
+	}
+
 	function save(){
 
 		if( $this->input->post() ){
@@ -47,6 +56,20 @@ class Groups extends CI_Controller{
 
 				$this->load->view('json/data', $data);	
 			}
+		}
+	}
+
+	function delete(){
+
+		if( $this->input->post('id') ){
+
+			$id = $this->input->post('id');
+
+			$this->group->delete($id);
+
+			echo true;
+
+			exit();
 		}
 	}
 }

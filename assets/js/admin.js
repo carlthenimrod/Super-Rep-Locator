@@ -27,18 +27,18 @@ $(function(){
 			//create geocoder
 			geocoder = new google.maps.Geocoder();
 
-			$.ajax('admin/options').done(function( options ){
+			//load user options
+			$.ajax('admin/options').done(function(result){ 
 
-				options = options;
+				//get admin options
+				options = result;
+
+				//load geolocator by default
+				loadGeolocator();
+
+				//change tab on click
+				$admin.find('nav li a').on('click', changeTab);
 			});
-
-			//load geolocator by default
-			//loadGeolocator();
-
-			loadGroups();
-
-			//change tab on click
-			$admin.find('nav li a').on('click', changeTab);
 		}
 
 		// Private Functions
@@ -119,6 +119,8 @@ $(function(){
 
 				//events
 				$('#sr-create form').on('submit', newGroup);
+				$('#sr-manage').on('click', '.sr-edit', editGroup);
+				$('#sr-manage').on('click', '.sr-delete', deleteGroup);
 			});
 		};
 
@@ -128,7 +130,7 @@ $(function(){
 				data = {};
 
 			//get name
-			data.name = $this.find('#sr-group-name').val();
+			data.name = $this.find('#sr-group-name').val().trim();
 
 			//find if default is checked
 			if( $this.find('#sr-default').is(':checked') ){
@@ -149,7 +151,13 @@ $(function(){
 			})
 			.done(function(result){
 
-				var $errors;
+				var $table,
+					$tr,
+					$td,
+					$label,
+					$input,
+					$img,
+					$errors;
 
 				if( result.id ){
 
@@ -159,8 +167,101 @@ $(function(){
 					//remove no groups message
 					$('#sr-manage').find('p').remove();
 
-					//TODO add success stuff
-					console.log(result);
+					//check if table exists
+					if( $('#sr-manage table').length > 0 ){
+
+						$table = $('#sr-manage table');
+					}
+					else{
+
+						//create table
+						$table = $('<table />').appendTo( '#sr-manage' );
+
+						//create table row
+						$tr = $('<tr />').appendTo( $table );
+
+						//create table headers
+						$('<th />', { colspan: '2' })
+						.html('Group Name')
+						.appendTo( $tr );
+
+						$('<th />', { colspan: '2' })
+						.html('Default')
+						.appendTo( $tr );
+					}
+
+					//create row, add id, append to table
+					$tr = $('<tr />',{
+						class: 'sr-group'
+					})
+					.data( 'id', result.id )
+					.insertAfter( $table.find('tr').first() );
+
+					//create td, add group name
+					$td = $('<td />')
+					.html( data.name )
+					.appendTo( $tr );
+
+					//create label for checkbox
+					$label = $('<label />', {
+						for: 'sr-group-default',
+						html: 'Default: '
+					});
+
+					//create checkbox
+					$input = $('<input />', {
+
+						id: 'sr-group-default',
+						name: 'sr-group-default',
+						type: 'checkbox'
+					});
+
+					//check if necessary
+					if( data.default ){
+
+						$input.prop('checked', true);
+					}
+
+					//add default checkbox
+					$td = $('<td />').append( $label, $input ).appendTo( $tr );
+
+					//add save icon
+					$td = $('<td />').prepend('<span>Saved!</span>').appendTo( $tr );
+
+					//create save
+					$img = $('<img />', {
+						alt: 'Saved!',
+						src: 'assets/img/save.png',
+						title: 'Saved!'
+					})
+					.appendTo( $td );
+
+					//add actions
+					$td = $('<td />').appendTo( $tr );
+
+					//create edit
+					$img = $('<img />', {
+						alt: 'Edit',
+						class: 'sr-edit',
+						src: 'assets/img/edit.png',
+						title: 'Edit'
+					})
+					.appendTo( $td );
+
+					//create delete
+					$img = $('<img />', {
+						alt: 'Delete',
+						class: 'sr-delete',
+						src: 'assets/img/delete.png',
+						title: 'Delete'
+					})
+					.appendTo( $td );
+
+					//fade saved message
+					$tr.find('td:nth-child(3)')
+					.children()
+					.delay( 2000 )
+					.fadeOut( 500 );
 				}
 				else if( result.errors ){
 
@@ -188,6 +289,50 @@ $(function(){
 			});
 
 			e.preventDefault();
+		};
+		
+		var editGroup = function(){
+
+			var $parent,
+				id;
+
+			//get parent
+			$parent = $(this).parents('tr');
+
+			//get id
+			id = $parent.data('id');
+		};
+
+		var deleteGroup = function(){
+
+			var $parent,
+				name,
+				data = {},
+				id;
+
+			//get parent
+			$parent = $(this).parents('tr');
+
+			//get info
+			id   = $parent.data('id');
+			name = $parent.find('td').first().html().trim();
+
+			//store id in data object
+			data.id = id;
+
+			if( confirm('Are you sure you want to delete the ' + name + ' group?') ){
+
+				$.ajax({
+					data: data,
+					type: 'POST',
+					url: 'groups/delete'
+				})
+				.done(function(r){
+
+					//if complete, remove from list
+					if(r) $parent.remove();
+				});
+			}
 		};
 
 		// Geolocator
@@ -226,6 +371,51 @@ $(function(){
 						markers: [],
 						reps: data.reps
 					}
+
+					//get groups
+					if(options.groups) $.ajax('groups/all').done(function(groups){ 
+
+						var $div,
+							$label,
+							$select,
+							$option,
+							i, l;
+
+						//create dropdown
+						$div = $('<div />', {
+							class: 'sr-rep-groups'
+						})
+						.insertAfter('.sr-rep-info');
+
+						$label = $('<label />').html('Groups: ').appendTo( $div );
+
+						$select = $('<select />')
+						.prop('multiple', 'multiple')
+						.attr('data-placeholder', 'Choose Groups...')
+						.appendTo( $div );
+
+						//create options for dropdown
+						for( i = 0, l = groups.length; i < l; ++i){
+
+							//create option tag
+							$option = $('<option />', {
+								html: groups[i].name,
+								value: groups[i].id
+							});
+
+							//check if is a default option
+							if( groups[i].default ){
+
+								$option.prop('selected', true);
+							}
+
+							//add option
+							$option.appendTo( $select );
+						}
+
+						//add chosen plugin
+						$select.chosen({ width: '325px' });
+					});
 
 					//create markers
 					createMarkers();
