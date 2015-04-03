@@ -61,10 +61,13 @@ $(function(){
 						groupId =  $('#sr-map').data('group-id');
 						groupId = parseInt(groupId, 10);
 
-						//filter reps
-						reps 	  = filterGroups(reps, groupId);
-						locations = filterLocations(reps, locations);
-						countries = filterCountries(reps, countries);
+						if(groupId){
+
+							//filter reps
+							reps 	  = filterGroups(reps, groupId);
+							locations = filterLocations(reps, locations);
+							countries = filterCountries(reps, countries);
+						}
 					}
 
 					//create selectMenu
@@ -583,12 +586,13 @@ $(function(){
 
 			var link;
 
-			link = $('<a />',{
+			link = $('<a />', {
 
 				href: 'mailto:' + email
-			});
+			})
+			.html(email);
 
-			return $('<div />').html('Email: ' + link);
+			return $('<div />').append( 'Email: ', link );
 		};
 
 		var parseAddress = function(address){
@@ -641,7 +645,7 @@ $(function(){
 
 			var link;
 
-			link = $('<a />',{
+			link = $('<a />', {
 
 				href: 'mailto:' + phone
 			})
@@ -732,7 +736,7 @@ $(function(){
 				}
 			}
 
-			return newLocations;
+			return newLocations.sort(alphabetical);
 		}
 
 		var filterCountries = function(reps, countries){
@@ -764,7 +768,16 @@ $(function(){
 				}
 			}
 
-			return newCountries;
+			return newCountries.sort(alphabetical);
+		}
+
+		function alphabetical(a, b){
+
+			if(a.long_name < b.long_name)
+				return -1;
+			if(a.long_name > b.long_name)
+				return 1;
+			return 0;
 		}
 
 		function isInArray(value, array){

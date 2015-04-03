@@ -553,7 +553,7 @@ $(function(){
 					for(i = 0, l = groups.length; i < l; ++i){
 
 						//if a default group
-						if( groups[i].default ){
+						if( parseInt( groups[i].default, 10 ) ){
 
 							$('.sr-rep-groups').find('option[value="' +  groups[i].id + '"]').prop('selected', true);
 						}
