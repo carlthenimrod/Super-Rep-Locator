@@ -45,5 +45,7 @@ $route['reps/save'] = 'reps/save';
 $route['reps/all'] = 'reps/all';
 $route['reps/delete'] = 'reps/delete';
 
+$route['g/(:any)'] = 'groups/index/$1';
+
 /* End of file routes.php */
 /* Location: ./application/config/routes.php */

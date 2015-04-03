@@ -2,6 +2,57 @@
 
 class Groups extends CI_Controller{
 
+	function __construct(){
+
+		parent::__construct();
+	}
+
+	function index($group = false){
+
+		if( $group ){
+
+			//get user options
+			$options = $this->options->get();
+
+			//if groups are enabled
+			if( $options->groups ){
+
+				//get group
+				$group = $this->group->get($group);
+
+				//if group found
+				if( $group ){
+
+					$data = array();
+
+					//add group info
+					$data['group_id'] = $group->id;
+					$data['group_name'] = $group->name;
+
+					$this->load->view('header');
+					$this->load->view('index', $data);
+					$this->load->view('footer');
+				}
+				else{
+
+					$this->load->view('header');
+					$this->load->view('index');
+					$this->load->view('footer');
+				}
+			}
+			else{
+
+				$this->load->view('header');
+				$this->load->view('index');
+				$this->load->view('footer');
+			}
+		}
+		else{
+
+			redirect();
+		}
+	}
+
 	function all(){
 
 		$groups = $this->group->all();

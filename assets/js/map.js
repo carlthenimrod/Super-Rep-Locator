@@ -6,6 +6,7 @@ $(function(){
 		//////////////////////
 		var map,
 			infoWindow,
+			options,
 			$locator = $('#sr-locator'),
 			$info = $('#sr-reps-info'),
 			$selectMenu,
@@ -22,38 +23,60 @@ $(function(){
 		//////////////////////
 		var init = function(){
 
-			//ajax on load, retrieve all db records
-			$.ajax({
+			//load user options
+			$.ajax(baseURL + 'admin/options').done(function(result){ 
 
-				'url' : 'reps/all'
-			})
-			.done(function(data){
+				//get admin options
+				options = result;
 
-				//store info
-				countries = data.countries;
-				locations = data.locations;
-				reps      = data.reps;
-				
-				//create map, center on USA
-				map = new google.maps.Map(document.getElementById("sr-map"), {
+				//ajax on load, retrieve all db records
+				$.ajax({
 
-					center: new google.maps.LatLng(38.555474, -95.664999),
-					zoom: 4,
-					mapTypeId: google.maps.MapTypeId.ROADMAP
+					url : baseURL + 'reps/all'
+				})
+				.done(function(data){
+
+					var groupId;
+
+					//store info
+					countries = data.countries;
+					locations = data.locations;
+					reps      = data.reps;
+					
+					//create map, center on USA
+					map = new google.maps.Map(document.getElementById("sr-map"), {
+
+						center: new google.maps.LatLng(38.555474, -95.664999),
+						zoom: 4,
+						mapTypeId: google.maps.MapTypeId.ROADMAP
+					});
+
+					//create info window	
+					infoWindow = new google.maps.InfoWindow();
+
+					//if groups are enable
+					if( options.groups ){
+
+						//get map id
+						groupId =  $('#sr-map').data('group-id');
+						groupId = parseInt(groupId, 10);
+
+						//filter reps
+						reps 	  = filterGroups(reps, groupId);
+						locations = filterLocations(reps, locations);
+						countries = filterCountries(reps, countries);
+					}
+
+					//create selectMenu
+					createSelectMenu();
+
+					//create reps
+					createReps();
+
+					//create event for info box
+					$info.on('mouseenter', '.sr-rep', markerBounce);
+					$info.on('mouseleave', '.sr-rep', markerBounceStop);
 				});
-
-				//create info window	
-				infoWindow = new google.maps.InfoWindow();
-
-				//create selectMenu
-				createSelectMenu();
-
-				//create reps
-				createReps();
-
-				//create event for info box
-				$info.on('mouseenter', '.sr-rep', markerBounce);
-				$info.on('mouseleave', '.sr-rep', markerBounceStop);
 			});
 		};
 
@@ -644,6 +667,110 @@ $(function(){
 
 			return $('<div />').append( link );
 		};
+
+		var filterGroups = function(reps, groupId){
+
+			var newReps = [],
+				groups,
+				id,
+				i, l, x, y;
+
+			for(i = 0, l = reps.length; i < l; ++i){
+
+				//if groups
+				if(reps[i].groups){
+
+					//get groups
+					groups = reps[i].groups;
+
+					for(x = 0, y = groups.length; x < y; ++x){
+
+						//store id
+						id = parseInt(groups[x], 10);
+
+						//if match
+						if( id === groupId ){
+
+							//add to new reps
+							newReps.push(reps[i]);
+
+							break;
+						}
+					}
+				}
+			}
+
+			return newReps;
+		}
+
+		var filterLocations = function(reps, locations){
+
+			var newLocations = [],
+				locationId,
+				i, l, x, y;
+
+			for(i = 0, l = reps.length; i < l; ++i){
+
+				//if location id
+				if(reps[i].location_id){
+
+					//store location id
+					locationId = parseInt(reps[i].location_id, 10);
+
+					for(x = 0, y = locations.length; x < y; ++x){
+
+						//if match
+						if( locationId === parseInt( locations[x].id, 10 ) ){
+
+							//add to locations if not already there
+							if( !isInArray(locations[x], newLocations) ){
+
+								newLocations.push( locations[x] );
+							}
+						}
+					}
+				}
+			}
+
+			return newLocations;
+		}
+
+		var filterCountries = function(reps, countries){
+
+			var newCountries = [],
+				countryId,
+				i, l, x, y;
+
+			for(i = 0, l = reps.length; i < l; ++i){
+
+				//if country id
+				if(reps[i].country_id){
+
+					//store country id
+					countryId = parseInt(reps[i].country_id, 10);
+
+					for(x = 0, y = countries.length; x < y; ++x){
+
+						//if match
+						if( countryId === parseInt( countries[x].id, 10 ) ){
+
+							//add to countries if not already there
+							if( !isInArray(countries[x], newCountries) ){
+
+								newCountries.push( countries[x] );
+							}
+						}
+					}
+				}
+			}
+
+			return newCountries;
+		}
+
+		function isInArray(value, array){
+
+  			return array.indexOf(value) > -1;
+		}
 
 		return{
 

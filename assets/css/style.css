@@ -299,7 +299,7 @@ section#sr-reps-info .sr-rep a:hover{
 	width: 37%;
 }
 #sr-admin .sr-edit-info .sr-rep-groups{
-	padding: 4px 3% 4px 0;
+	padding: 2px 3% 0 0;
 }
 #sr-admin .sr-edit-info .sr-rep-groups label{
 	color: #000;
@@ -310,13 +310,12 @@ section#sr-reps-info .sr-rep a:hover{
 	padding: 0 15px 0 0;
 	text-align: right;
 	white-space: nowrap;
-	width: 10%;
+	width: 20%;
 }
 #sr-admin .sr-edit-info .sr-rep-groups select{
 	text-align: left;
-	width: 37%;
 }
-#sr-admin .sr-edit-info .sr-rep-groups .chosen-container-multi .chosen-choices {
+#sr-admin .sr-edit-info .sr-rep-groups .chosen-container-multi .chosen-choices{
 	border: 1px solid #ccc;
 	background: #ddd;
 }

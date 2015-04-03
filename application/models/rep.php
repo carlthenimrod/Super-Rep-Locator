@@ -28,7 +28,17 @@ class rep extends CI_Model{
 		//if results
 		if( $query->num_rows() > 0 ){
 
-			$json->reps = $query->result();
+			$result = $query->result();
+
+			foreach($result as &$r){
+
+				if( !is_null($r->groups) ){
+
+					$r->groups = explode('*', $r->groups );
+				}
+			}
+
+			$json->reps = $result;
 		}
 
 		return $json;
@@ -105,6 +115,19 @@ class rep extends CI_Model{
 			'lng'         => $post['lng']
 		);
 
+		//if groups, implode, add to data array
+		if( $this->input->post('groups_save') ){
+
+			if( $post['groups'] ){
+
+				$data['groups'] = implode( '*', $post['groups'] );
+			}
+			else{
+
+				$data['groups'] = NULL;
+			}
+		}
+
 		$this->db->insert('rep', $data);
 
 		$post['id'] = $this->db->insert_id();
@@ -131,6 +154,19 @@ class rep extends CI_Model{
 			'lat'     => $post['lat'],
 			'lng'     => $post['lng']
 		);
+
+		//if groups, implode, add to data array
+		if( $this->input->post('groups_save') ){
+
+			if( $post['groups'] ){
+
+				$data['groups'] = implode( '*', $post['groups'] );
+			}
+			else{
+
+				$data['groups'] = NULL;
+			}
+		}
 
 		$this->db->where('id', $id);
 		$this->db->update('rep', $data);

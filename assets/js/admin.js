@@ -381,6 +381,9 @@ $(function(){
 							$option,
 							i, l;
 
+						//save groups
+						map.sr.groups = groups;
+
 						//create dropdown
 						$div = $('<div />', {
 							class: 'sr-rep-groups'
@@ -391,7 +394,7 @@ $(function(){
 
 						$select = $('<select />')
 						.prop('multiple', 'multiple')
-						.attr('data-placeholder', 'Choose Groups...')
+						.attr('data-placeholder', 'Click to Assign a Group...')
 						.appendTo( $div );
 
 						//create options for dropdown
@@ -403,18 +406,12 @@ $(function(){
 								value: groups[i].id
 							});
 
-							//check if is a default option
-							if( groups[i].default ){
-
-								$option.prop('selected', true);
-							}
-
 							//add option
 							$option.appendTo( $select );
 						}
 
 						//add chosen plugin
-						$select.chosen({ width: '325px' });
+						map.sr.chosen = $select.chosen({ width: '242px' });
 					});
 
 					//create markers
@@ -468,6 +465,12 @@ $(function(){
 					'lng' : reps[i].lng
 				}
 
+				//add groups if enabled
+				if(options.groups){
+
+					marker.attr.groups = reps[i].groups;
+				}
+
 				//add click event
 				google.maps.event.addListener(marker, 'click', markerClick);
 
@@ -497,7 +500,9 @@ $(function(){
 		var showInfoBox = function(obj){
 
 			var editBox = $('.sr-edit-info'),
-				children = editBox.children();
+				children = editBox.children(),
+				groups,
+				i, l;
 
 			//clear inputs
 			editBox.find('input').val('');
@@ -517,6 +522,47 @@ $(function(){
 
 			//if id is set, set save var to 1 else 0, indicates to update and not create new record
 			(obj.id) ? editBox.find('#sr-save').val(0) : editBox.find('#sr-save').val(1);
+
+			//if groups are enabled and we have groups, select necessary options
+			if( options.groups ){
+
+				if( typeof obj.groups !=='undefined' ){
+
+					//deselect all options
+					$('.sr-rep-groups').find('option').prop('selected', false);
+
+					if(obj.groups){
+
+						//select options
+						for(i = 0, l = obj.groups.length; i < l; ++i){
+
+							$('.sr-rep-groups').find('option[value="' +  obj.groups[i] + '"]').prop('selected', true);
+
+						}
+					}
+					
+					//update chosen plugin
+					map.sr.chosen.trigger('chosen:updated');
+				}
+				else{ //load defaults
+
+					//set groups
+					groups = map.sr.groups;
+
+					//select options
+					for(i = 0, l = groups.length; i < l; ++i){
+
+						//if a default group
+						if( groups[i].default ){
+
+							$('.sr-rep-groups').find('option[value="' +  groups[i].id + '"]').prop('selected', true);
+						}
+
+						//update chosen plugin
+						map.sr.chosen.trigger('chosen:updated');
+					}
+				}
+			}
 
 			//if editBox is open, just return
 			if(editBox.css('display') === 'block') return;
@@ -888,6 +934,7 @@ $(function(){
 				web     = $(this).find('input#sr-web').val(),
 				id      = $(this).find('input#sr-id').val(),
 				save    = $(this).find('input#sr-save').val(),
+				groups,
 				lat,
 				lng,
 				data,
@@ -962,6 +1009,17 @@ $(function(){
 				data.location = false;
 			}
 
+			//if groups are enabled, get groups
+			if( options.groups ){
+
+				//get multi-select values
+				groups = $(this).find('.sr-rep-groups select').val();
+
+				//add to data object
+				data.groups      = groups;
+				data.groups_save = true;
+			}
+
 			if(loading) return;
 
 			//now loading
@@ -972,10 +1030,10 @@ $(function(){
 			//do ajax
 			$.ajax({
 
-				'data' : data,
-				'dataType' : 'json',
-				'type' : 'POST',
-				'url' : 'admin/save/'
+				data : data,
+				dataType : 'json',
+				type : 'POST',
+				url : 'admin/save/'
 
 			})
 			.then(function(data){
@@ -1008,6 +1066,13 @@ $(function(){
 						'web' : data.web,
 						'lat' : data.lat,
 						'lng' : data.lng
+					}
+
+					//if groups are enabled, set groups for marker
+					if( options.groups ){
+
+						//add to data object
+						marker.attr.groups = data.groups;
 					}
 
 					marker.setIcon(null);
@@ -1049,6 +1114,13 @@ $(function(){
 							'web' : data.web,
 							'lat' : data.lat,
 							'lng' : data.lng
+						}
+
+						//if groups are enabled, set groups for marker
+						if( options.groups ){
+
+							//add to data object
+							marker.attr.groups = data.groups;
 						}
 
 						map.sr.markers.push(marker);
