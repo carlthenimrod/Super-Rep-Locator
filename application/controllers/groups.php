@@ -12,7 +12,7 @@ class Groups extends CI_Controller{
 		if( $group ){
 
 			//get user options
-			$options = $this->options->get();
+			$options = $this->option->get();
 
 			//if groups are enabled
 			if( $options->groups ){
