@@ -554,6 +554,7 @@ $(function(){
 				//events
 				$('form.sr-search').on('submit', searchRep);
 				$('form.sr-info').on('submit', saveRep);
+				$('form.sr-info').on('reset', resetRep);
 				$('.sr-delete').on('click', deleteRep);
 				$('.sr-hide').on('click', hideInfoBox);
 			});
@@ -613,6 +614,9 @@ $(function(){
 		};
 
 		var markerClick = function(){
+
+			//show hide button
+			$('button.sr-hide').show();
 
 			//show info box, pass attributes
 			showInfoBox(this.attr);
@@ -1004,6 +1008,9 @@ $(function(){
 							'zip' : zip
 						};
 
+						//hide the hide button
+						$('button.sr-hide').hide();
+
 						//show info box, send form values
 						showInfoBox(obj);
 
@@ -1273,6 +1280,39 @@ $(function(){
 
 				showErrorMessage('Unable to Save, Try Again and Contact Administrator if Problem Persists.');
 			});
+		};
+
+		var resetRep = function(e){
+
+			var groups;
+
+			//reset input boxes
+			$(this).find('input').val('');
+
+			//if groups are enabled, set back to default
+			if( options.groups ){
+
+				//set groups
+				groups = map.sr.groups;
+
+				//deselect all options
+				$('.sr-rep-groups').find('option').prop('selected', false);
+
+				//select options
+				for(i = 0, l = groups.length; i < l; ++i){
+
+					//if a default group
+					if( parseInt( groups[i].default, 10 ) ){
+
+						$('.sr-rep-groups').find('option[value="' +  groups[i].id + '"]').prop('selected', true);
+					}
+
+					//update chosen plugin
+					map.sr.chosen.trigger('chosen:updated');
+				}
+			}
+
+			e.preventDefault();
 		};
 
 		var deleteRep = function(){
