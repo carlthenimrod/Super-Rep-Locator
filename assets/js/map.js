@@ -624,7 +624,7 @@ $(function(){
 			})
 			.html(email);
 
-			return $('<div />').append( 'Email: ', link );
+			return $('<div />').append( link );
 		};
 
 		var parseAddress = function(address){
