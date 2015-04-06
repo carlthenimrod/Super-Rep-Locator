@@ -11,8 +11,15 @@ class Admin extends CI_Controller{
 
 	function index(){
 
+		//get admin options
+		$options = $this->options->get();
+
+		$data = array();
+
+		$data['options'] = $options;
+
 		$this->load->view('admin/header');
-		$this->load->view('admin/index');
+		$this->load->view('admin/index', $data);
 		$this->load->view('admin/footer');
 	}
 
@@ -64,6 +71,12 @@ class Admin extends CI_Controller{
 	}
 
 	function groups(){
+
+		//get admin options
+		$options = $this->options->get();
+
+		//if groups aren't enabled, return to admin
+		if( !$options->groups ) redirect('admin');
 
 		$data = array();
 

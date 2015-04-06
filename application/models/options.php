@@ -22,7 +22,7 @@ class options extends CI_Model{
 			$user_id = $this->session->userdata('id');
 
 			//insert options
-			$this->db->insert('options', array( 'user_id' => $user_id ));
+			$this->db->insert('options', array( 'user_id' => '1' ));
 
 			//get options
 			$query = $this->db->get('options');
