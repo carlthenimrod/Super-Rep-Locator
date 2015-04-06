@@ -354,9 +354,6 @@ section#sr-reps-info .sr-rep a:hover{
 }
 
 /*** Groups ***/
-#sr-groups{
-
-}
 #sr-groups section#sr-create{
 	background: #fafafa url(../img/groups.png) 20px center no-repeat;
 	margin: 0 0 5px 0;
@@ -481,8 +478,20 @@ section#sr-reps-info .sr-rep a:hover{
 	text-align: right;
 	width: 10%;
 }
-#sr-groups section#sr-manage table tr td:nth-child(4) img{
-	margin: 4px 0 0 5px;
+#sr-groups section#sr-manage table tr td:nth-child(1) span{
+	float: left;
+}
+#sr-groups section#sr-manage table tr td:nth-child(1) img{
+	margin: 0 0 0 10px;
+	width: 10px;
+}
+#sr-groups section#sr-manage table tr td:nth-child(1) input{
+	background-color: #efefef;
+	-webkit-box-shadow: 0 0 3px 1px rgba(0,0,0,0.1);
+	box-shadow: 0 0 3px 1px rgba(0,0,0,0.1);
+}
+#sr-groups section#sr-manage table tr.sr-group td:nth-child(4) img{
+	margin: 4px 0 0 0;
 }
 #sr-groups #sr-loading{
 	background-color: #fafafa;

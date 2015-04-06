@@ -7,6 +7,7 @@ $(function(){
 		var map,
 			infoWindow,
 			options,
+			color,
 			$locator = $('#sr-locator'),
 			$info = $('#sr-reps-info'),
 			$selectMenu,
@@ -60,6 +61,9 @@ $(function(){
 						//get map id
 						groupId =  $('#sr-map').data('group-id');
 						groupId = parseInt(groupId, 10);
+
+						//get color
+						color = $('#sr-map').data('color');
 
 						if(groupId){
 
@@ -398,22 +402,50 @@ $(function(){
 				//add animation if option is set
 				if(animate){
 
-					//create marker
-					marker = new google.maps.Marker({
+					//if color is selected
+					if(color){
 
-	    				animation: google.maps.Animation.DROP,
-						map: map,
-						position: coords
-					});
+						//create marker
+						marker = new google.maps.Marker({
+
+							animation: google.maps.Animation.DROP,
+							icon: baseURL + 'assets/img/marker-' + color + '.png',
+							map: map,
+							position: coords
+						});
+					}
+					else{
+
+						//create marker
+						marker = new google.maps.Marker({
+
+							animation: google.maps.Animation.DROP,
+							map: map,
+							position: coords
+						});
+					}
 				}
 				else{
 
-					//create marker
-					marker = new google.maps.Marker({
+					if(color){
 
-						map: map,
-						position: coords
-					});
+						//create marker
+						marker = new google.maps.Marker({
+
+							icon: baseURL + 'assets/img/marker-' + color + '.png',
+							map: map,
+							position: coords
+						});
+					}
+					else{
+
+						//create marker
+						marker = new google.maps.Marker({
+
+							map: map,
+							position: coords
+						});
+					}
 				}
 
 				//parse rep
@@ -447,7 +479,7 @@ $(function(){
 				if( selectedLocation ) html = selectedLocation.long_name + ', ';
 				if( selectedCountry ) html += selectedCountry.long_name + ' - ';
 
-				html += markers.length + ' Distributors Located';
+				html += markers.length + ' Located';
 
 				//store html
 				h2.html(html);

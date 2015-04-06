@@ -8,10 +8,6 @@
 			<li>
 				<a href="#" data-tab="groups" title="Groups">Groups</a>
 			</li>
-
-			<li>
-				<a href="#" data-tab="settings" title="Settings">Settings</a>
-			</li>
 		</ul>
 	</nav>
 

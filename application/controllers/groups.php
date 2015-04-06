@@ -26,8 +26,9 @@ class Groups extends CI_Controller{
 					$data = array();
 
 					//add group info
-					$data['group_id'] = $group->id;
+					$data['group_id']   = $group->id;
 					$data['group_name'] = $group->name;
+					$data['color'] 		= $group->color;
 
 					$this->load->view('header');
 					$this->load->view('index', $data);
@@ -108,6 +109,62 @@ class Groups extends CI_Controller{
 				$this->load->view('json/data', $data);	
 			}
 		}
+	}
+
+	function save_name(){
+
+		if( $this->input->post() ){
+
+			//set rules
+			$this->form_validation->set_rules('name', 'Group name', 'required|alpha|is_unique[group.name]');
+
+				if( $this->form_validation->run() ){
+
+				$data = array();
+
+				$data['id'] = $this->input->post('id');
+				$data['name'] = $this->input->post('name');
+
+				if( $this->group->save($data) ){
+
+					echo true;
+
+					exit();
+				}
+			}
+		}
+
+		echo false;
+
+		exit();
+	}
+
+	function save_default(){
+
+		if( $this->input->post() ){
+
+			$data = array();
+
+			$data['id'] = $this->input->post('id');
+			$data['default'] = ( (bool) $this->input->post('checked') ) ? 1 : 0;
+
+			if( $this->group->save($data) ){
+
+				echo true;
+
+				exit();
+			}
+			else{
+
+				echo false;
+
+				exit();
+			}
+		}
+
+		echo false;
+
+		exit();
 	}
 
 	function delete(){

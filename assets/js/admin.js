@@ -119,6 +119,7 @@ $(function(){
 
 				//events
 				$('#sr-create form').on('submit', newGroup);
+				$('#sr-manage').on('change', '.sr-group-default', saveGroupDefault);
 				$('#sr-manage').on('click', '.sr-edit', editGroup);
 				$('#sr-manage').on('click', '.sr-delete', deleteGroup);
 			});
@@ -199,8 +200,17 @@ $(function(){
 
 					//create td, add group name
 					$td = $('<td />')
-					.html( data.name )
+					.html( '<span>' + data.name + '</span>')
 					.appendTo( $tr );
+
+					//create edit
+					$img = $('<img />', {
+						alt: 'Edit',
+						class: 'sr-edit',
+						src: 'assets/img/edit.png',
+						title: 'Edit'
+					})
+					.appendTo( $td );
 
 					//create label for checkbox
 					$label = $('<label />', {
@@ -238,15 +248,6 @@ $(function(){
 
 					//add actions
 					$td = $('<td />').appendTo( $tr );
-
-					//create edit
-					$img = $('<img />', {
-						alt: 'Edit',
-						class: 'sr-edit',
-						src: 'assets/img/edit.png',
-						title: 'Edit'
-					})
-					.appendTo( $td );
 
 					//create delete
 					$img = $('<img />', {
@@ -290,17 +291,149 @@ $(function(){
 
 			e.preventDefault();
 		};
-		
-		var editGroup = function(){
+
+		var saveGroupDefault = function(){
 
 			var $parent,
-				id;
+				data = {};
 
 			//get parent
 			$parent = $(this).parents('tr');
 
-			//get id
-			id = $parent.data('id');
+			//set data
+			data.id = $parent.data('id');
+
+			//get checked status
+			data.checked = ( $(this).prop('checked') ) ? 1 : 0;
+
+			//save default
+			$.ajax({
+				data: data,
+				type: 'POST',
+				url: 'groups/save_default'
+			})
+			.done(function(r){
+
+				var $td,
+					$img;
+
+				if(r){ //if success
+
+					//create save image
+					$img = $('<img />', {
+						alt: 'Saved!',
+						src: 'assets/img/save.png',
+						title: 'Saved!'
+					});
+
+					//get third td
+					$td = $parent.find('td').eq(2).empty();
+
+					//append save message, fade message
+					$td
+					.append('<span>Saved!</span>', $img)
+					.children()
+					.delay( 2000 )
+					.fadeOut( 500 );
+				}
+			});
+		}
+		
+		var editGroup = function(){
+
+			var data = {},
+				name,
+				$input,
+				$parent,
+				$td,
+				$img;
+
+			//get parent
+			$parent = $(this).parents('tr');
+
+			//find td
+			$td = $parent.find('td').eq(0);
+
+			//get current name
+			name = $td.find('span').html().trim();
+
+			//create input box
+			$input = $('<input />', {
+				class: 'sr-save-name',
+				value: name
+			});
+
+			//empty td
+			$td.empty();
+
+			//append input box
+			$td.append( $input );
+
+			//focus on input box
+			$input.focus();
+
+			$input.keypress(function(e){
+
+				if(e.which == 13){
+
+					data.id = $parent.data('id');
+					data.name = $input.val();
+
+					$.ajax({
+						data: data,
+						type: 'POST',
+						url: 'groups/save_name'
+					})
+					.done(function(r){
+
+						if(r){ //if success
+
+							//add group name
+							$td.html( '<span>' + data.name + '</span>');
+
+							//create edit
+							$img = $('<img />', {
+								alt: 'Edit',
+								class: 'sr-edit',
+								src: 'assets/img/edit.png',
+								title: 'Edit'
+							})
+							.appendTo( $td );
+
+							//create save image
+							$img = $('<img />', {
+								alt: 'Saved!',
+								src: 'assets/img/save.png',
+								title: 'Saved!'
+							});
+
+							//get third td
+							$td = $parent.find('td').eq(2).empty();
+
+							//append save message, fade message
+							$td
+							.append('<span>Saved!</span>', $img)
+							.children()
+							.delay( 2000 )
+							.fadeOut( 500 );
+						}
+						else{ //reset
+
+							//add group name
+							$td.html( '<span>' + name + '</span>');
+
+							//create edit
+							$img = $('<img />', {
+								alt: 'Edit',
+								class: 'sr-edit',
+								src: 'assets/img/edit.png',
+								title: 'Edit'
+							})
+							.appendTo( $td );
+						}
+					});
+				}
+			});
 		};
 
 		var deleteGroup = function(){

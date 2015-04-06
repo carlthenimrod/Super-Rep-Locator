@@ -8,7 +8,13 @@
 	</section><!-- #sr-locator -->
 
 	<?php if( isset($group_id) ) : ?>
-		<div id="sr-map" data-group-id="<?= $group_id; ?>"></div><!-- #sr-map -->
+		<?php if( isset($color) ) : ?>
+			<div id="sr-map" data-group-id="<?= $group_id; ?>" data-color="<?= $color; ?>">
+		<?php else : ?>
+			<div id="sr-map" data-group-id="<?= $group_id; ?>">
+		<?php endif; ?>
+
+		</div><!-- #sr-map -->
 	<?php else : ?>
 		<div id="sr-map"></div><!-- #sr-map -->
 	<?php endif; ?>

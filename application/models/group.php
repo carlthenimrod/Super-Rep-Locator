@@ -43,9 +43,20 @@ class group extends CI_Model{
 
 	function save($data){
 
-		$this->db->insert('group', $data);
+		if( isset($data['id']) ){ //update
 
-		return $this->db->insert_id();
+			$this->db->where('id', $data['id']);
+
+			unset($data['id']);
+
+			return $this->db->update('group', $data);
+		}
+		else{ //new record
+
+			$this->db->insert('group', $data);
+
+			return $this->db->insert_id();
+		}
 	}
 
 	function delete($id){
