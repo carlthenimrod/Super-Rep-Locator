@@ -587,6 +587,11 @@ article#sr-login section#sr-form button{
 
 @media screen and (max-width: 480px) {
 
+	/*** Map ***/
+	#sr-map{
+		height: 400px;
+	}
+
 	/*** Locator ***/
 	section#sr-locator h1{
 		font-size: 22px;
