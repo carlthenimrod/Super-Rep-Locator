@@ -602,12 +602,12 @@ article#sr-login section#sr-form button{
 	}
 	section#sr-locator .sr-select-menu .sr-select-country{
 		display: block;
-		margin: 5px;
+		margin: 5px auto;
 		width: auto;
 	}
 	section#sr-locator .sr-select-menu .sr-select-location{
 		display: block;
-		margin: 5px;
+		margin: 5px auto;
 		width: auto;
 	}
 
