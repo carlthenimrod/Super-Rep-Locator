@@ -1,6 +1,6 @@
 <?php
 
-class options extends CI_Model{
+class option extends CI_Model{
 
     function __construct(){
     	

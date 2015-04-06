@@ -12,7 +12,7 @@ class Admin extends CI_Controller{
 	function index(){
 
 		//get admin options
-		$options = $this->options->get();
+		$options = $this->option->get();
 
 		$data = array();
 
@@ -73,7 +73,7 @@ class Admin extends CI_Controller{
 	function groups(){
 
 		//get admin options
-		$options = $this->options->get();
+		$options = $this->option->get();
 
 		//if groups aren't enabled, return to admin
 		if( !$options->groups ) redirect('admin');
@@ -88,14 +88,5 @@ class Admin extends CI_Controller{
 	function settings(){
 
 		$this->load->view('admin/settings');
-	}
-
-	function options(){
-
-		$options = $this->options->get();
-
-		$data['json'] = json_encode( $options );
-
-		$this->load->view('json/data', $data);
 	}
 }

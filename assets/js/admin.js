@@ -28,7 +28,7 @@ $(function(){
 			geocoder = new google.maps.Geocoder();
 
 			//load user options
-			$.ajax('admin/options').done(function(result){ 
+			$.ajax('options/get').done(function(result){ 
 
 				//get admin options
 				options = result;

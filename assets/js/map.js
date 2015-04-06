@@ -25,7 +25,7 @@ $(function(){
 		var init = function(){
 
 			//load user options
-			$.ajax(baseURL + 'admin/options').done(function(result){ 
+			$.ajax(baseURL + 'options/get').done(function(result){ 
 
 				//get admin options
 				options = result;
