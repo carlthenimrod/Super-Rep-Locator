@@ -139,7 +139,7 @@ $(function(){
 					});
 
 					//add as selected if US
-					if( parseInt(countries[i].id, 10) === 1 ){
+					if( countries[i].short_name === 'US' ){
 
 						option.attr('selected', 'selected');
 
@@ -153,6 +153,13 @@ $(function(){
 						//append option to select element
 						select.append(option);
 					}
+				}
+
+				//if no selected country, select first
+				if( !selectedCountry ){
+
+					//default country
+					selectedCountry = countries[0];
 				}
 
 				//bind event
@@ -169,6 +176,11 @@ $(function(){
 					disable_search_threshold: 10,
 					width: '100%'
 				});
+			}
+			else{
+
+				//default country is first
+				selectedCountry = countries[0];
 			}
 		};
 
