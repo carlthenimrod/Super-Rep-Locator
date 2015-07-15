@@ -120,52 +120,56 @@ $(function(){
 				option,
 				i, l;
 
-			//create country menu
-			$countryMenu = $('<section />', { class: 'sr-select-country' });
+			//if more than 1 country
+			if( countries.length > 1 ){
 
-			//create country dropdown
-			select = $('<select />', { class: 'sr-countries' });
+				//create country menu
+				$countryMenu = $('<section />', { class: 'sr-select-country' });
 
-			//for each country create an option
-			for(i = 0, l = countries.length; i < l; ++i){
+				//create country dropdown
+				select = $('<select />', { class: 'sr-countries' });
 
-				//create option
-				option = $('<option />', {
-					html: countries[i].long_name,
-					value: countries[i].id
+				//for each country create an option
+				for(i = 0, l = countries.length; i < l; ++i){
+
+					//create option
+					option = $('<option />', {
+						html: countries[i].long_name,
+						value: countries[i].id
+					});
+
+					//add as selected if US
+					if( parseInt(countries[i].id, 10) === 1 ){
+
+						option.attr('selected', 'selected');
+
+						selectedCountry = countries[i];
+
+						//make top option
+						select.prepend(option);
+					}
+					else{
+
+						//append option to select element
+						select.append(option);
+					}
+				}
+
+				//bind event
+				select.on('change', countryChange);
+
+				//append select to country menu
+				$countryMenu.append( select );
+
+				//append country menu to container
+				$selectMenu.append( $countryMenu );
+
+				//initialize chosen plugin
+				select.chosen({ 
+					disable_search_threshold: 10,
+					width: '100%'
 				});
-
-				//add as selected if US
-				if( parseInt(countries[i].id, 10) === 1 ){
-
-					option.attr('selected', 'selected');
-
-					selectedCountry = countries[i];
-
-					//make top option
-					select.prepend(option);
-				}
-				else{
-
-					//append option to select element
-					select.append(option);
-				}
 			}
-
-			//bind event
-			select.on('change', countryChange);
-
-			//append select to country menu
-			$countryMenu.append( select );
-
-			//append country menu to container
-			$selectMenu.append( $countryMenu );
-
-			//initialize chosen plugin
-			select.chosen({ 
-				disable_search_threshold: 10,
-				width: '100%'
-			});
 		};
 
 		var countryChange = function(){
