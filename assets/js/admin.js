@@ -33,6 +33,9 @@ $(function(){
 				//get admin options
 				options = result;
 
+				//set options to int
+				options.groups = parseInt( options.groups, 10 );
+
 				//load geolocator by default
 				loadGeolocator();
 
