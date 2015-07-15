@@ -30,6 +30,9 @@ $(function(){
 				//get admin options
 				options = result;
 
+				//set options to int
+				options.groups = parseInt( options.groups, 10 );
+
 				//ajax on load, retrieve all db records
 				$.ajax({
 
