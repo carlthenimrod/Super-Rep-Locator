@@ -524,7 +524,7 @@ $(function(){
 						$div = $('<div />', {
 							class: 'sr-rep-groups'
 						})
-						.insertAfter('.sr-rep-info');
+						.appendTo('.sr-rep-info div:first-child');
 
 						$label = $('<label />').html('Groups: ').appendTo( $div );
 
@@ -547,7 +547,7 @@ $(function(){
 						}
 
 						//add chosen plugin
-						map.sr.chosen = $select.chosen({ width: '242px' });
+						map.sr.chosen = $select.chosen({ width: '45%' });
 					});
 
 					//create markers
@@ -595,6 +595,7 @@ $(function(){
 					'zip' : reps[i].zip,
 					'company' : reps[i].company,
 					'phone' : reps[i].phone,
+					'cell' : reps[i].cell,
 					'fax' : reps[i].fax,
 					'email' : reps[i].email,
 					'web' : reps[i].web,
@@ -655,6 +656,7 @@ $(function(){
 			if(obj.zip) editBox.find('#sr-zip').val(obj.zip);
 			if(obj.company) editBox.find('#sr-company').val(obj.company);
 			if(obj.phone) editBox.find('#sr-phone').val(obj.phone);
+			if(obj.cell) editBox.find('#sr-cell').val(obj.cell);
 			if(obj.fax) editBox.find('#sr-fax').val(obj.fax);
 			if(obj.email) editBox.find('#sr-email').val(obj.email);
 			if(obj.web) editBox.find('#sr-web').val(obj.web);
@@ -1072,6 +1074,7 @@ $(function(){
 				zip     = $(this).find('input#sr-zip').val(),
 				company = $(this).find('input#sr-company').val(),
 				phone   = $(this).find('input#sr-phone').val(),
+				cell    = $(this).find('input#sr-cell').val(),
 				fax     = $(this).find('input#sr-fax').val(),
 				email   = $(this).find('input#sr-email').val(),
 				web     = $(this).find('input#sr-web').val(),
@@ -1097,6 +1100,7 @@ $(function(){
 				'zip' : zip.trim(),
 				'company' : company.trim(),
 				'phone' : phone.trim(),
+				'cell' : cell.trim(),
 				'fax' : fax.trim(),
 				'email' : email.trim(),
 				'web' : web.trim(),
@@ -1204,6 +1208,7 @@ $(function(){
 						'zip' : data.zip,
 						'company' : data.company,
 						'phone' : data.phone,
+						'cell' : data.cell,
 						'fax' : data.fax,
 						'email' : data.email,
 						'web' : data.web,
@@ -1252,6 +1257,7 @@ $(function(){
 							'zip' : data.zip,
 							'company' : data.company,
 							'phone' : data.phone,
+							'cell' : data.cell,
 							'fax' : data.fax,
 							'email' : data.email,
 							'web' : data.web,

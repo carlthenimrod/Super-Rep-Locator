@@ -35,35 +35,53 @@
 		<div class="sr-edit-info">
 			<form class="sr-info">
 				<div class="sr-rep-info">
-					<label for="sr-name" class="sr-name">Name:</label>
-					<input type="textfield" id="sr-name" /><!-- #sr-name -->
+					<div>
+						<label for="sr-name" class="sr-name">Name:</label>
 
-					<label for="sr-company" class="sr-company">Company:</label>
-					<input type="textfield" id="sr-company" /><!-- #sr-company -->
+						<input type="textfield" id="sr-name" /><!-- #sr-name -->
 
-					<label for="sr-address" class="sr-address">Address:</label>
-					<input type="textfield" id="sr-address" /><!-- #sr-address -->
+						<label for="sr-address" class="sr-address">Address:</label>
 
-					<label for="sr-phone">Phone:</label>
-					<input type="textfield" id="sr-phone" /><!-- #sr-phone -->
+						<input type="textfield" id="sr-address" /><!-- #sr-address -->
 
-					<label for="sr-city">City:</label>
-					<input type="textfield" id="sr-city" /><!-- #sr-city -->
-					
-					<label for="sr-fax">Fax:</label>
-					<input type="textfield" id="sr-fax" /><!-- #sr-fax -->
+						<label for="sr-city">City:</label>
 
-					<label for="sr-state">State:</label>
-					<input type="textfield" id="sr-state" /><!-- #sr-state -->
+						<input type="textfield" id="sr-city" /><!-- #sr-city -->
 
-					<label for="sr-email">Email:</label>
-					<input type="textfield" id="sr-email" /><!-- #sr-email -->
+						<label for="sr-state">State:</label>
 
-					<label for="sr-zip">Zip:</label>
-					<input type="textfield" id="sr-zip" /><!-- #sr-zip -->
+						<input type="textfield" id="sr-state" /><!-- #sr-state -->
 
-					<label for="sr-web">Web:</label>
-					<input type="textfield" id="sr-web" /><!-- #sr-web -->
+						<label for="sr-zip">Zip:</label>
+
+						<input type="textfield" id="sr-zip" /><!-- #sr-zip -->
+					</div>
+
+					<div>
+						<label for="sr-company" class="sr-company">Company:</label>
+
+						<input type="textfield" id="sr-company" /><!-- #sr-company -->
+
+						<label for="sr-phone">Phone:</label>
+
+						<input type="textfield" id="sr-phone" /><!-- #sr-phone -->
+
+						<label for="sr-cell">Cell:</label>
+
+						<input type="textfield" id="sr-cell" /><!-- #sr-cell -->
+						
+						<label for="sr-fax">Fax:</label>
+
+						<input type="textfield" id="sr-fax" /><!-- #sr-fax -->
+
+						<label for="sr-email">Email:</label>
+
+						<input type="textfield" id="sr-email" /><!-- #sr-email -->
+
+						<label for="sr-web">Web:</label>
+
+						<input type="textfield" id="sr-web" /><!-- #sr-web -->
+					</div>
 				</div>
 
 				<div class="sr-loading">

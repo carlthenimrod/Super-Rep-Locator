@@ -264,7 +264,7 @@ section#sr-reps-info .sr-rep a:hover{
 	background: rgba(245, 245, 245, 0.95);
 	border-bottom: 1px solid #ccc;
 	display: none;
-	min-height: 200px;
+	min-height: 230px;
 	padding: 10px 20px;
 	position: absolute;
 	top: 0;
@@ -273,40 +273,43 @@ section#sr-reps-info .sr-rep a:hover{
 	z-index: 9999;
 }
 #sr-admin .sr-edit-info .sr-rep-info{
+	display: table;
 	overflow: hidden;
+	width: 100%;
 }
-#sr-admin .sr-edit-info .sr-rep-info label, #sr-admin .sr-edit-info .sr-rep-info input[type="textfield"]{
-	margin: 4px 0;
+#sr-admin .sr-edit-info .sr-rep-info > div{
+	display: table-cell;
+	width: 50%;
 }
 #sr-admin .sr-edit-info .sr-rep-info label{
 	color: #000;
+	display: inline-block;
 	font-size: 13px;
-	float: left;
 	line-height: 20px;
 	padding: 0 15px 0 0;
 	text-align: right;
 	white-space: nowrap;
-	width: 10%;
+	width: 20%;
 }
 #sr-admin .sr-edit-info .sr-rep-info input[type="textfield"]{
 	border: 1px solid #ccc;
 	background-color: #ddd;
 	color: #000;
-	float: left;
+	display: inline-block;
 	height: 20px;
-	margin: 4px 3% 4px 0;
+	margin: 4px 0 4px 0;
 	padding: 0 5px;
-	width: 37%;
+	width: 75%;
 }
 #sr-admin .sr-edit-info .sr-rep-groups{
-	padding: 2px 3% 0 0;
+	padding: 2px 0 0 0;
 }
 #sr-admin .sr-edit-info .sr-rep-groups label{
 	color: #000;
 	display: inline-block;
 	font-size: 13px;
 	line-height: 20px;
-	margin: 4px 0;
+	margin: 4px 3px 4px 0;
 	padding: 0 15px 0 0;
 	text-align: right;
 	white-space: nowrap;

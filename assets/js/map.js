@@ -581,6 +581,7 @@ $(function(){
 				state,
 				zip,
 				phone,
+				cell,
 				fax,
 				web;
 
@@ -591,16 +592,17 @@ $(function(){
 			});
 
 			//create shorthand names
-			name    = rep.name.trim();
-			company = rep.company.trim();
-			email   = rep.email.trim();
-			address = rep.address.trim();
-			city    = rep.city.trim();
-			state   = rep.state.trim();
-			zip     = rep.zip.trim();
-			phone   = rep.phone.trim();
-			fax     = rep.fax.trim();
-			web     = rep.web.trim();
+			name    = ( rep.name )    ? rep.name.trim()    : false;
+			company = ( rep.company ) ? rep.company.trim() : false;
+			email   = ( rep.email )   ? rep.email.trim()   : false;
+			address = ( rep.address ) ? rep.address.trim() : false;
+			city    = ( rep.city )    ? rep.city.trim()    : false;
+			state   = ( rep.state )   ? rep.state.trim()   : false;
+			zip     = ( rep.zip )     ? rep.zip.trim()     : false;
+			phone   = ( rep.phone )   ? rep.phone.trim()   : false;
+			cell    = ( rep.cell )    ? rep.cell.trim()    : false;
+			fax     = ( rep.fax )     ? rep.fax.trim()     : false;
+			web     = ( rep.web )     ? rep.web.trim()     : false;
 
 			//parse text
 			if( name ) 
@@ -615,6 +617,8 @@ $(function(){
 				$content.append( parseAddress2( city, state, zip ) );
 			if( phone ) 
 				$content.append( parsePhone( phone ) );
+			if( cell ) 
+				$content.append( parseCell( cell ) );
 			if( fax ) 
 				$content.append( parseFax( fax ) );
 			if( web ) 
@@ -703,6 +707,19 @@ $(function(){
 			.html(phone);
 
 			return $('<div />').append( 'Phone: ', link );
+		};
+
+		var parseCell = function(cell){
+
+			var link;
+
+			link = $('<a />', {
+
+				href: 'mailto:' + cell
+			})
+			.html(cell);
+
+			return $('<div />').append( 'Cell: ', link );
 		};
 
 		var parseFax = function(fax){
